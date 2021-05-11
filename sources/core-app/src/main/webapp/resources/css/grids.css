@@ -1,0 +1,247 @@
+
+/*-----------------------------------------------------------------------*/
+/*------------------------- LEFT-RIGHT CONTINER -------------------------*/
+/*-----------------------------------------------------------------------*/
+
+.lr-container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.lr-container .lr-left {
+	display: flex;
+	align-items: center;
+	flex: 1;
+	white-space: nowrap;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+.lr-container .lr-left > * {
+	margin-right: 5px;
+}
+
+.lr-container .lr-right {
+	display: flex;
+	align-items: center;
+	flex: 0;
+	white-space: nowrap;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+.lr-container .lr-right > * {
+	margin-left: 5px;
+}
+
+/*-----------------------------------------------------------------------*/
+/*--------------------------- RESPONSIVE FORM ---------------------------*/
+/*-----------------------------------------------------------------------*/
+
+@media ( min-width : 641px) 
+{
+	.resp-form {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		grid-template-rows: auto;
+		justify-items: stretch;
+		align-items: center;
+	}
+	.resp-form .label, .resp-form .label-s {
+		margin: 5px 10px 5px 0;
+	}
+	.resp-form .control, .resp-form .control-s {
+		box-sizing: border-box;
+		max-width: 580px;
+		margin: 5px 0 5px 0;
+	}
+	.resp-form .control>*, .resp-form .control-s>* {
+		box-sizing: border-box;
+	}
+	.resp-form .control-full {
+		grid-column: 1/span 2;
+		max-width: 640px;
+		margin: 5px 0 5px 0;
+	}
+	.resp-form .spacer {
+		grid-column: 1/span 2;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	.resp-form .width-20 {
+		max-width: 150px !important;
+	}
+	.resp-form .width-50 {
+		max-width: 250px !important;
+	}
+}
+
+@media ( max-width : 640px)
+{
+	.resp-form {
+		font-size: 14px;
+	}
+	.resp-form .label {
+		display: block;
+		margin: 10px 0 5px 0;
+		font-weight: 300;
+	}
+	.resp-form .control {
+		box-sizing: border-box;
+		display: block;
+		width: 100%;
+		margin: 0 0 5px 0;
+	}
+	.resp-form .label-s {
+		display: inline;
+		margin: 5px 10px 5px 0;
+		vertical-align: top;
+	}
+	.resp-form .control-s {
+		display: inline;
+		box-sizing: border-box;
+		max-width: 580px;
+		margin: 5px 0 5px 0;
+		vertical-align: top;
+	}
+	.resp-form .control-s::after {
+		content: ' ';
+		display: block;
+	}
+	.resp-form .control>*, .resp-form .control-s>* {
+		box-sizing: border-box;
+	}
+	.resp-form .control-full {
+		width: 100%;
+		margin-top: 10px;
+		margin-bottom: 5px;
+	}
+	.resp-form .spacer {
+		display: block;
+		height: 15px;
+	}
+	.resp-form .width-20 {
+		max-width: 150px !important;
+	}
+	.resp-form .width-50 {
+		max-width: 250px !important;
+	}
+}
+
+/*-----------------------------------------------------------------------*/
+/*------------------------ RESPONSIVE FORM TABLE ------------------------*/
+/*-----------------------------------------------------------------------*/
+
+@media ( min-width : 641px) 
+{
+	.resp-form-table {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		grid-template-rows: auto;
+		justify-items: stretch;
+		align-items: center;
+	}
+	.resp-form-table .label {
+		margin: 5px 20px 5px 0;
+		font-weight: bold;		
+		white-space: nowrap;
+	}
+	.resp-form-table .control {
+		box-sizing: border-box;
+		margin: 5px 0 5px 0;
+		font-size: 1.1em;
+
+		overflow-wrap: break-word;
+  		word-wrap: break-word;
+  		hyphens: auto;
+	}
+	.resp-form-table .control>* {
+		box-sizing: border-box;
+	}
+}
+
+@media ( max-width : 640px)
+{
+	.resp-form-table {
+		font-size: 14px;
+	}
+	.resp-form-table .label {
+		display: block;
+		margin: 10px 0 5px 0;
+		font-weight: bold;
+	}
+	.resp-form-table .control {
+		box-sizing: border-box;
+		display: block;
+		width: 100%;
+		margin: 0 0 5px 0;
+		font-size: 1.1em;
+		
+		overflow-wrap: break-word;
+  		word-wrap: break-word;
+  		hyphens: auto;
+	}
+	.resp-form-table .control>* {
+		box-sizing: border-box;
+	}
+}
+
+/*-----------------------------------------------------------------------*/
+/*-------------------------- CENTER CONTAINER ---------------------------*/
+/*-----------------------------------------------------------------------*/
+
+.center-container {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	max-width: 98%;
+	padding-top: 50px;
+}
+
+/*-----------------------------------------------------------------------*/
+/*------------------------------ PANEL BOX ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+.panel-box {
+	border: 1px solid #c8c8c8;
+	background-color: #fbfbfb;
+	border-radius: 3px;
+	padding: 10px;
+}
+
+.panel-box-alt {
+	box-sizing: border-box;
+	box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, 0.26), 0 1px 5px 0 rgba(0, 0, 0, 0.16);
+	border-radius: 2px;
+	background-color: #fbfcff;
+	min-width: 240px; 
+	padding: 30px;
+}
+
+.panel-box-alt .title-container {
+	margin-bottom: 30px; 
+	text-align: center;
+}
+
+.panel-box-alt .field-container {
+	margin-bottom: 10px;
+	width: 240px; 
+	max-width: 100%; 
+}
+
+.panel-box-alt .field-container .field-label, .panel-box-alt .field-container-big .field-label {
+	display: block;
+	margin-bottom: 3px;
+	color: #666;
+}
+
+.panel-box-alt .field-container .message, .panel-box-alt .field-container-big .message {
+	display: block;
+	color: #a80000;
+	font-size: .9em;
+}
+

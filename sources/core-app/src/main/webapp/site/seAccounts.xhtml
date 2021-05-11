@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="./mainTemplate.xhtml">
+
+<ui:define name="contentHead">
+	<title>#{constApp.product}.seAccounts</title>
+</ui:define>
+
+<ui:define name="contentTitle"><span>#{msg0['seAccounts.label.title']}</span></ui:define>
+
+<ui:define name="metadata">
+	<f:metadata>
+		<f:viewAction action="#{seAccountsController.pageLoad}" onPostback="false" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="content">
+
+	<h:form id="frm" rendered="#{seAccountsController.displayMode}">
+		<div class="panel-display">
+		<div class="area-top">
+			<div class="toolbar-container">
+				<div class="tb-left">
+					<p:commandLink id="btnAdd" action="#{seAccountsController.add}" ajax="false" disabled="#{mainTemplateController.permissionsUser.seAccounts lt 2}">
+						<div class="btn btn-resp"><i class="btn-icon fa fa-plus" /><span class="btn-label">#{msg0['button.new']}</span></div>
+					</p:commandLink>
+				</div>
+				<div class="tb-right">
+					<h:link id="btnExport" href="#">
+						<div class="btn btn-resp"><i class="btn-icon fas fa-download" /><span class="btn-label">#{msg0['button.export']}</span></div>
+					</h:link>
+					<p:menu overlay="true" trigger="btnExport" my="left top" at="left bottom">
+						<p:menuitem value="Excel" onclick="PF('xlsExport').jq.click();" />
+						<p:menuitem value="CSV" onclick="PF('csvExport').jq.click();" />
+					</p:menu>
+					<p:commandButton widgetVar="xlsExport" ajax="false" style="display:none;">
+						<p:dataExporter type="xlsx" target="tbl" fileName="#{msg0['seAccounts.label.exportFilename']}" postProcessor="#{seAccountsController.postProcessXLSX}" />
+					</p:commandButton>
+					<p:commandButton widgetVar="csvExport" ajax="false" style="display:none;">
+						<p:dataExporter type="csv" target="tbl" fileName="#{msg0['seAccounts.label.exportFilename']}" postProcessor="#{seAccountsController.postProcessCSV}" encoding="ISO-8859-1" />
+					</p:commandButton>
+				</div>
+			</div>
+
+			<p:dataTable id="tbl" value="#{seAccountsController.lstSeAccounts}" var="item"
+						 style="margin-top:10px;" rows="15" paginator="true" rowsPerPageTemplate="15,50,100,200"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 emptyMessage="#{msg0['label.grid_no_records']}"
+						 rowStyleClass="#{item.isActive ? null : 'inactiveRowTable'}">
+
+				<p:column headerText="#{msg0['seAccounts.field.name']}" sortBy="#{item.name}">
+					<h:outputText value="#{item.name}" />
+				</p:column>
+
+				<p:column width="70" exportable="false" styleClass="cell-buttons">
+
+					<p:commandLink class="grid-btn" action="#{seAccountsController.edit}" ajax="false" title="#{msg0['seAccounts.label.editTitle']}">
+						<f:setPropertyActionListener value="#{item}" target="#{seAccountsController.seAccount}" />
+						<i class="far fa-edit grid-btn-icon" />
+					</p:commandLink>
+
+					<p:commandLink class="grid-btn" oncomplete="PF('confirmation').show();" title="#{msg0['seAccounts.label.deleteTitle']}" disabled="#{mainTemplateController.permissionsUser.seAccounts lt 2}">
+						<f:setPropertyActionListener value="#{item}" target="#{seAccountsController.seAccount}" />
+						<i class="far fa-trash-alt grid-btn-icon" />
+					</p:commandLink>
+
+				</p:column>
+
+			</p:dataTable>
+
+		</div>
+		</div>
+	</h:form>
+
+	<h:form>
+		<p:confirmDialog message="#{msg0['seAccounts.message.deleteConfirm']}" header="#{msg0['seAccounts.label.deleteTitle']}" widgetVar="confirmation">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('confirmation').hide();" actionListener="#{seAccountsController.delete}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('confirmation').hide();" type="button" />
+		</p:confirmDialog>
+	</h:form>
+
+	<h:form prependId="false" rendered="#{seAccountsController.editMode}">
+		<div class="panel-edit">
+			<div class="toolbar-container">
+				<div class="tb-left">
+					<p:commandLink id="btnReturn" action="#{seAccountsController.cancel}" ajax="false" immediate="true">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-arrow-left" /><span class="btn-label">#{msg0['button.return']}</span></div>
+					</p:commandLink>
+				</div>
+				<div class="tb-right">
+					<p:commandLink id="btnSave" action="#{seAccountsController.save}" ajax="false" rendered="#{mainTemplateController.permissionsUser.seAccounts == 2}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-save" /><span class="btn-label">#{msg0['button.save']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnUndo" update=":msgs,@form" action="#{seAccountsController.undoEdit()}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-undo" /><span class="btn-label">#{msg0['button.undo']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnDelete" onclick="PF('confirmation').show();" rendered="#{seAccountsController.seAccount.accountId != null and mainTemplateController.permissionsUser.seAccounts == 2}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-trash" /><span class="btn-label">#{msg0['button.delete']}</span></div>
+					</p:commandLink>
+				</div>
+			</div>
+
+			<div class="resp-form" style="margin-top: 20px;">
+
+				<h:outputLabel value="#{msg0['seAccounts.field.name']}" for="name" styleClass="label" />
+				<p:inputText id="name" value="#{seAccountsController.seAccount.name}" maxlength="50" styleClass="control" />
+
+				<div class="spacer" />
+
+				<h:outputLabel value="#{msg0['seAccounts.field.isActive']}" for="isActive" styleClass="label-s" />
+				<p:selectBooleanCheckbox id="isActive" value="#{seAccountsController.seAccount.isActive}" styleClass="control-s" />
+
+			</div>
+
+		</div>
+	</h:form>
+
+</ui:define>
+
+</ui:composition>
+
+</html>

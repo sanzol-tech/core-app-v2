@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui"
+	  xmlns:s="http://sanzol.com.ar/ui">
+
+<ui:composition template="./mainTemplate.xhtml">
+
+<ui:define name="contentHead">
+	<title>#{constApp.product}.seRegistrations</title>
+
+	<script src="#{request.contextPath}/resources/json-viewer/jquery.json-viewer.js" />
+	<link href="#{request.contextPath}/resources/json-viewer/jquery.json-viewer.css" rel="stylesheet" />
+
+<style>
+	.output-text-box {
+		border: 1px solid #a6a6a6;
+		border-radius: 3px;
+		padding: .429em;
+		color: #555;
+		min-height: 30px;
+		font-size: 14px;
+	}
+</style>
+
+</ui:define>
+
+<ui:define name="contentTitle"><span>#{msg0['seRegistrations.label.title']}</span></ui:define>
+
+<ui:define name="metadata">
+	<f:metadata>
+		<f:viewAction action="#{seRegistrationsController.pageLoad}" onPostback="false" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="content">
+	<h:form id="frm" rendered="#{seRegistrationsController.displayMode}">
+		<div class="panel-display">
+		<div class="area-top">
+			<div class="toolbar-container">
+
+				<div class="tb-left">
+					<p:commandLink id="btnWhitelist" action="seWhitelist?faces-redirect=true" disabled="#{mainTemplateController.permissionsUser.seWhitelist lt 2}">
+						<div class="btn btn-resp"><i class="btn-icon far fa-id-badge" /><span class="btn-label">#{msg1['menu.seWhitelist']}</span></div>
+					</p:commandLink>
+				</div>
+
+				<div class="tb-right">
+					<h:link id="btnExport" href="#">
+						<div class="btn btn-resp"><i class="btn-icon fas fa-download" /><span class="btn-label">#{msg0['button.export']}</span></div>
+					</h:link>
+					<p:menu overlay="true" trigger="btnExport" my="left top" at="left bottom">
+						<p:menuitem value="Excel" onclick="PF('xlsExport').jq.click();" />
+						<p:menuitem value="CSV" onclick="PF('csvExport').jq.click();" />
+					</p:menu>
+					<p:commandButton widgetVar="xlsExport" ajax="false" style="display:none;">
+						<p:dataExporter type="xlsx" target="tbl" fileName="#{msg0['seRegistrations.label.exportFilename']}" postProcessor="#{seRegistrationsController.postProcessXLSX}" />
+					</p:commandButton>
+					<p:commandButton widgetVar="csvExport" ajax="false" style="display:none;">
+						<p:dataExporter type="csv" target="tbl" fileName="#{msg0['seRegistrations.label.exportFilename']}" postProcessor="#{seRegistrationsController.postProcessCSV}" encoding="ISO-8859-1" />
+					</p:commandButton>
+				</div>
+
+			</div>
+
+			<div class="panel-filter" style="margin-top: 5px;">
+				<div class="pf-item">
+					<h:outputLabel value="#{msg0['seRegistrations.field.eventState']}" for="registrationState" styleClass="label" />
+					<p:selectOneMenu id="registrationState" value="#{seRegistrationsController.registrationStateId}" autoWidth="false" styleClass="control">
+						<p:ajax update=":msgs,@form" listener="#{seRegistrationsController.refresh()}" />
+						<f:selectItem itemLabel="#{msg0['label.select_default']}" itemValue="" />
+						<f:selectItems value="#{seRegistrationsController.lstSeRegistrationState}" var="item" itemLabel="#{item.name}" itemValue="#{item.registrationStateId}" />
+					</p:selectOneMenu>
+				</div>
+				<div class="pf-item-right">
+					<p:selectBooleanCheckbox id="onlyNotExpired" value="#{seRegistrationsController.onlyNotExpired}" style="margin:3px 5px 3px 0px;">
+						<p:ajax update=":msgs,@form" listener="#{seRegistrationsController.refresh}" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="#{msg0['seRegistrations.label.onlyNotExpired']}" />
+				</div>
+			</div>
+
+			<p:dataTable id="tbl" value="#{seRegistrationsController.lstSeRegistrations}" var="item"
+						 style="margin-top:10px;" rows="15" paginator="true" rowsPerPageTemplate="15,50,100,200"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 emptyMessage="#{msg0['label.grid_no_records']}" rowStyleClass="#{seRegistrationsController.getRowStyleClass(item)}">
+
+				<p:column headerText="#{msg0['seRegistrations.field.lastname']}" sortBy="#{item.lastname}">
+					<h:outputText value="#{item.lastname}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seRegistrations.field.firstname']}" sortBy="#{item.firstname}">
+					<h:outputText value="#{item.firstname}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seRegistrations.field.username']}" sortBy="#{item.username}" priority="4">
+					<h:outputText value="#{item.username}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seRegistrations.field.birthDate']}" sortBy="#{item.birthDate}" priority="4">
+					<s:outputDate value="#{item.birthDate}" format="DATE" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seRegistrations.field.email']}" style="text-overflow:ellipsis;">
+					<h:outputText value="#{item.email}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seRegistrations.field.cellphone']}" sortBy="#{item.cellphone}" priority="4">
+					<h:outputText value="#{item.cellphone}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seRegistrations.field.eventState']}" sortBy="#{item.lastEvent.seRegistrationState.name}">
+					<h:outputText value="#{item.stateName}" style="font-weight:bold;" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seRegistrations.field.eventDate']}" sortBy="#{item.lastEvent.eventDate}" priority="4">
+					<s:outputDate value="#{item.lastEvent.eventDate}" format="DATE_TIME" />
+				</p:column>
+
+				<p:column width="70" exportable="false" styleClass="cell-buttons">
+
+					<p:commandLink styleClass="grid-btn" action="#{seRegistrationsController.edit}" ajax="false" disabled="#{mainTemplateController.permissionsUser.seRegistrations lt 2}">
+						<f:setPropertyActionListener value="#{item}" target="#{seRegistrationsController.seRegistration}" />
+						<i class="fa fa-search grid-btn-icon" />
+					</p:commandLink>
+
+					<p:commandLink styleClass="grid-btn" oncomplete="PF('deleteConfirm').show();" title="#{msg0['seRegistrations.label.deleteTitle']}" disabled="#{mainTemplateController.permissionsUser.seRegistrations lt 2}">
+						<f:setPropertyActionListener value="#{item}" target="#{seRegistrationsController.seRegistration}" />
+						<i class="far fa-trash-alt grid-btn-icon" />
+					</p:commandLink>
+
+				</p:column>
+
+			</p:dataTable>
+
+		</div>
+		</div>
+	</h:form>
+
+	<h:form>
+		<p:confirmDialog message="#{msg0['seRegistrations.message.authorizeConfirm']}" header="#{msg0['seRegistrations.label.authorizeTitle']}" widgetVar="authorizeConfirm">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('authorizeConfirm').hide();" actionListener="#{seRegistrationsController.authorize}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('authorizeConfirm').hide();" type="button" />
+		</p:confirmDialog>
+		<p:confirmDialog message="#{msg0['seRegistrations.message.revokeConfirm']}" header="#{msg0['seRegistrations.label.revokeTitle']}" widgetVar="revokeConfirm">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('revokeConfirm').hide();" actionListener="#{seRegistrationsController.revoke}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('revokeConfirm').hide();" type="button" />
+		</p:confirmDialog>
+		<p:confirmDialog message="#{msg0['seRegistrations.message.deleteConfirm']}" header="#{msg0['seRegistrations.label.deleteTitle']}" widgetVar="deleteConfirm">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('deleteConfirm').hide();" actionListener="#{seRegistrationsController.delete}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('deleteConfirm').hide();" type="button" />
+		</p:confirmDialog>
+	</h:form>
+
+	<h:form prependId="false" rendered="#{seRegistrationsController.editMode}">
+		<div class="panel-edit">
+			<div class="toolbar-container">
+				<div class="tb-left">
+					<p:commandLink id="btnReturn" action="#{seRegistrationsController.cancel}" ajax="false" immediate="true">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-arrow-left" /><span class="btn-label">#{msg0['button.return']}</span></div>
+					</p:commandLink>
+				</div>
+				<div class="tb-right">
+					<p:commandLink id="btnAuthorize" onclick="PF('authorizeConfirm').show();" rendered="#{mainTemplateController.permissionsUser.seRegistrations == 2}" disabled="#{!seRegistrationsController.seRegistration.authorization_pending}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-thumbs-up" /><span class="btn-label">#{msg0['seRegistrations.button.authorize']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnRevoke" onclick="PF('revokeConfirm').show();" rendered="#{mainTemplateController.permissionsUser.seRegistrations == 2}" disabled="#{!seRegistrationsController.seRegistration.authorization_pending}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-thumbs-down" /><span class="btn-label">#{msg0['seRegistrations.button.revoke']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnDelete" onclick="PF('deleteConfirm').show();" rendered="#{mainTemplateController.permissionsUser.seRegistrations == 2}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-trash" /><span class="btn-label">#{msg0['button.delete']}</span></div>
+					</p:commandLink>
+				</div>
+			</div>
+
+			<div class="resp-form" style="margin-top: 20px;">
+
+				<h:outputLabel value="#{msg0['seRegistrations.field.username']}" for="username" styleClass="label" />
+				<h:outputText id="username" value="#{seRegistrationsController.seRegistration.username}" styleClass="output-text-box control" />
+
+				<h:outputLabel value="#{msg0['seRegistrations.field.lastname']}" for="lastname" styleClass="label" />
+				<h:outputText id="lastname" value="#{seRegistrationsController.seRegistration.lastname}" styleClass="output-text-box control" />
+
+				<h:outputLabel value="#{msg0['seRegistrations.field.firstname']}" for="firstname" styleClass="label" />
+				<h:outputText id="firstname" value="#{seRegistrationsController.seRegistration.firstname}" styleClass="output-text-box control" />
+
+				<h:outputLabel value="#{msg0['seRegistrations.field.birthDate']}" for="birthDate" styleClass="label" />
+				<s:outputDate id="birthDate" value="#{seRegistrationsController.seRegistration.birthDate}" format="DATE" style="max-width:200px;" styleClass="output-text-box control" />
+
+				<h:outputLabel value="#{msg0['seRegistrations.field.gender']}" for="gender" styleClass="label" />
+				<h:outputText id="gender" value="#{seRegistrationsController.seRegistration.genderName}" style="max-width:200px;" styleClass="output-text-box control" />
+
+				<h:outputLabel value="#{msg0['seRegistrations.field.documentId']}" for="documentId" styleClass="label" />
+				<h:outputText id="documentId" value="#{seRegistrationsController.seRegistration.documentId}" styleClass="output-text-box control" />
+
+				<h:outputLabel value="#{msg0['seRegistrations.field.email']}" for="email" styleClass="label" />
+				<h:outputText id="email" value="#{seRegistrationsController.seRegistration.email}" styleClass="output-text-box control" />
+
+				<h:outputLabel value="#{msg0['seRegistrations.field.cellphone']}" for="cellphone" styleClass="label" />
+				<h:outputText id="cellphone" value="#{seRegistrationsController.seRegistration.cellphone}" styleClass="output-text-box control" />
+
+			</div>
+
+			<h:outputLabel value="#{msg0['seRegistrations.field.eventState']}" style="display: block; font-size: 14px; margin-top: 30px; margin-bottom: 5px;" />
+			<p:dataTable id="tbl" value="#{seRegistrationsController.seRegistration.lstSeRegistrationsEvents}" var="item" reflow="true"
+						 emptyMessage="#{msg0['label.grid_no_records']}">
+
+				<p:column headerText="#{msg0['seRegistrationsEvents.field.seRegistrationState']}">
+					<h:outputText value="#{item.seRegistrationState.name}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seRegistrationsEvents.field.eventDate']}">
+					<s:outputDate value="#{item.eventDate}" format="DATE_TIME" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seRegistrationsEvents.field.expirationDate']}">
+					<s:outputDate value="#{item.expirationDate}" format="DATE_TIME" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seRegistrationsEvents.field.ipAddress']}">
+					<h:outputText value="#{item.ipAddress}" />
+				</p:column>
+
+			</p:dataTable>
+
+		</div>
+	</h:form>
+
+</ui:define>
+
+</ui:composition>
+
+</html>

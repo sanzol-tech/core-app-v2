@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+
+		<property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+		<property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.format_sql">false</property>
+
+		<property name="hibernate.id.new_generator_mappings">false</property>
+
+		<property name="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+		<property name="hibernate.connection.provider_class">org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider</property>
+		<property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.max_size">20</property>
+		<property name="hibernate.c3p0.timeout">3600</property>
+		<property name="hibernate.c3p0.acquire_increment">5</property>
+
+		<mapping class="sanzol.se.model.entities.SeAccount"/>
+		<mapping class="sanzol.se.model.entities.SeAudit"/>
+		<mapping class="sanzol.se.model.entities.SeEmailTemplate"/>
+		<mapping class="sanzol.se.model.entities.SeError"/>
+		<mapping class="sanzol.se.model.entities.SeNotification"/>
+		<mapping class="sanzol.se.model.entities.SeNotificationType"/>
+		<mapping class="sanzol.se.model.entities.SeNotificationUser"/>
+		<mapping class="sanzol.se.model.entities.SePassword"/>
+		<mapping class="sanzol.se.model.entities.SePasswordRecovery"/>
+		<mapping class="sanzol.se.model.entities.SePermission"/>
+		<mapping class="sanzol.se.model.entities.SeProperty"/>
+		<mapping class="sanzol.se.model.entities.SeRegistration"/>
+		<mapping class="sanzol.se.model.entities.SeRegistrationEvent"/>
+		<mapping class="sanzol.se.model.entities.SeRegistrationState"/>
+		<mapping class="sanzol.se.model.entities.SeRole"/>
+		<mapping class="sanzol.se.model.entities.SeRolePermission"/>
+		<mapping class="sanzol.se.model.entities.SeRoleUser"/>
+		<mapping class="sanzol.se.model.entities.SeSector"/>
+		<mapping class="sanzol.se.model.entities.SeSectorUser"/>
+		<mapping class="sanzol.se.model.entities.SeSoftVersion"/>
+		<mapping class="sanzol.se.model.entities.SeUser"/>
+		<mapping class="sanzol.se.model.entities.SeWhitelist"/>
+
+	</session-factory>
+</hibernate-configuration>

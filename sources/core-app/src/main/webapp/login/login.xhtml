@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="./loginTemplate.xhtml">
+
+<ui:define name="contentHead">
+	<title>#{constApp.product}.login</title>
+</ui:define>
+
+<ui:define name="content">
+<f:view transient="true" locale="#{constApp.locale}">
+	<p:growl id="msgs" showSummary="false" showDetail="true" life="5000" />
+
+	<div class="background fondook">
+		<h:graphicImage value="/resources/images/logo.svg" style="vertical-align:middle; height:40px" />
+		<h:outputText value="#{constApp.title}" style="margin-left:15px;" />
+	</div>
+
+	<h:form id="frm" prependId="false" autocomplete="off">
+
+	<div class="center-container">
+		<div class="panel">
+			<div class="title-container">
+				<h:graphicImage value="/resources/images/lock.svg" style="vertical-align:middle; height:40px" />
+				<span style="margin-left: 5px; vertical-align: middle; font-size: 26px; color: #007bb7;">#{msg0['login.label.title']}</span>
+			</div>
+
+			<div class="field-container">
+				<span class="field-label">#{msg0['login.field.username']}</span>
+				<p:inputText value="#{lnLoginController.username}" maxlength="20" style="width: 100%"
+							 required="true" requiredMessage="#{msg0['login.message.username.required']}" />
+			</div>
+
+			<div class="field-container">
+				<span class="field-label">#{msg0['login.field.password']}</span>
+				<p:password value="#{lnLoginController.password}" maxlength="32" style="width: 100%"
+							required="true" requiredMessage="#{msg0['login.message.password.required']}" />
+			</div>
+
+			<h:inputHidden id="deviceDetail" value="#{lnLoginController.deviceDetail}" />
+			<script>
+				document.getElementById("deviceDetail").value = getDeviceInfo();
+			</script>
+
+			<div class="buttons-container">
+				<p:commandButton value="#{msg0['button.enter']}" icon="fa fa-sign-in-alt" action="#{lnLoginController.authenticate}" ajax="false" />
+			</div>
+		</div>
+
+		<div style="box-sizing: border-box; margin: 10px 5px;">
+			<h:link value="#{msg0['login.button.passwordRecover']}" outcome="/login/passwordRecovery.xhtml" style="float:left;"/>
+			<h:link value="#{msg0['login.button.signUp']}" outcome="/login/userRegistration.xhtml" style="float:right;"/>
+		</div>
+	</div>
+
+	</h:form>
+
+</f:view>
+</ui:define>
+
+</ui:composition>
+
+</html>

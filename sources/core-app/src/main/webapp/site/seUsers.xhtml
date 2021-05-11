@@ -1,0 +1,314 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui"
+	  xmlns:s="http://sanzol.com.ar/ui">
+
+<ui:composition template="./mainTemplate.xhtml">
+
+<ui:define name="contentHead">
+	<title>#{constApp.product}.seUsers</title>
+
+	<script src="#{request.contextPath}/resources/js/crud.js" />
+</ui:define>
+
+<ui:define name="contentTitle"><span>#{msg0['seUsers.label.title']}</span></ui:define>
+
+<ui:define name="metadata">
+	<f:metadata>
+		<f:viewAction action="#{seUsersController.pageLoad}" onPostback="false" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="content">
+
+	<h:form prependId="false"
+			onkeypress="if (event.keyCode == 13) return false;"
+	 		rendered="#{seUsersController.displayMode}">
+
+		<div class="panel-display">
+		<div class="area-top">
+			<div class="toolbar-container">
+				<div class="tb-left">
+					<p:commandLink id="btnAdd" action="#{seUsersController.add}" ajax="false" disabled="#{mainTemplateController.permissionsUser.seUsers lt 2}">
+						<div class="btn btn-resp"><i class="btn-icon fa fa-plus" /><span class="btn-label">#{msg0['button.new']}</span></div>
+					</p:commandLink>
+					<div id="btnFilterHide" onclick="hideFilters();" style="cursor: pointer; display: none;">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-filter" /><span class="btn-label">#{msg0['button.hide']}</span></div>
+					</div>
+					<div id="btnFilterShow" onclick="showFilters();" style="cursor: pointer;">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-filter" /><span class="btn-label">#{msg0['button.filter']}</span></div>
+					</div>
+				</div>
+				<div class="tb-right">
+					<h:link id="btnExport" href="#">
+						<div class="btn btn-resp"><i class="btn-icon fas fa-download" /><span class="btn-label">#{msg0['button.export']}</span></div>
+					</h:link>
+					<p:menu overlay="true" trigger="btnExport" my="left top" at="left bottom">
+						<p:menuitem value="Excel" onclick="PF('xlsExport').jq.click();" />
+						<p:menuitem value="CSV" onclick="PF('csvExport').jq.click();" />
+					</p:menu>
+					<p:commandButton widgetVar="xlsExport" ajax="false" style="display:none;">
+						<p:dataExporter type="xlsx" target="tbl" fileName="#{msg0['seUsers.label.exportFilename']}" postProcessor="#{seUsersController.postProcessXLSX}" />
+					</p:commandButton>
+					<p:commandButton widgetVar="csvExport" ajax="false" style="display:none;">
+						<p:dataExporter type="csv" target="tbl" fileName="#{msg0['seUsers.label.exportFilename']}" postProcessor="#{seUsersController.postProcessCSV}" encoding="ISO-8859-1" />
+					</p:commandButton>
+				</div>
+			</div>
+
+			<div id="pnlFilterTop" class="panel-filter" style="padding-top: 5px; display: none;">
+				<div class="pf-item">
+					<h:outputLabel value="#{msg0['seUsers.field.seAccount']}" for="fltSeAccount" styleClass="label" />
+					<p:selectOneMenu id="fltSeAccount" value="#{seUsersController.fltAccountId}" autoWidth="false" styleClass="control">
+						<p:ajax update=":msgs,@form" listener="#{seUsersController.refresh()}" />
+						<f:selectItem itemLabel="#{msg0['label.select_default']}" itemValue="" />
+						<f:selectItems value="#{seUsersController.lstSeAccount}" var="row" itemLabel="#{row.name}" itemValue="#{row.accountId}" />
+					</p:selectOneMenu>
+				</div>
+			</div>
+
+			<p:dataTable id="tbl" widgetVar="wvTbl" value="#{seUsersController.lstSeUsers}" var="item"
+						 style="margin-top:10px;" rows="15" paginator="true" rowsPerPageTemplate="15,50,100,200"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 emptyMessage="#{msg0['label.grid_no_records']}"
+						 rowStyleClass="#{item.isActive ? null : 'inactiveRowTable'}">
+
+				<f:facet name="header">
+					<div class="lr-container">
+						<p:outputPanel styleClass="lr-left" style="padding:5px;">
+							<p:focus context="tbl" for="globalFilter" />
+							<p:inputText id="globalFilter" placeholder="#{msg0['button.search']}" onkeyup="PF('wvTbl').filter();" style="width:100%; max-width:300px;" />
+						</p:outputPanel>
+						<div class="lr-right"></div>
+					</div>
+				</f:facet>
+
+				<p:column headerText="#{msg0['seUsers.field.username']}" sortBy="#{item.username}">
+					<h:outputText value="#{item.username}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seUsers.field.seAccount']}" sortBy="#{item.seAccount.name}" priority="3">
+					<h:outputText value="#{item.seAccount.name}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seUsers.field.fullName']}" sortBy="#{item.fullName}" filterBy="#{item.fullName}" filterStyleClass="invisible" priority="3">
+					<h:outputText value="#{item.fullName}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seUsers.field.email']}" priority="4">
+					<h:outputText value="#{item.email}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seUsers.field.cellphone']}" priority="4">
+					<h:outputText value="#{item.cellphone}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seUsers.field.lastLogin']}" sortBy="#{item.lastLogin}" priority="4">
+					<s:outputDate value="#{item.lastLogin}" format="DATE_TIME_SHORT" />
+				</p:column>
+
+				<p:column width="140" exportable="false" styleClass="cell-buttons">
+
+					<p:commandLink class="grid-btn" action="#{seUsersController.edit}" ajax="false" title="#{msg0['seUsers.label.editTitle']}">
+						<f:setPropertyActionListener value="#{item}" target="#{seUsersController.seUser}" />
+						<i class="far fa-edit grid-btn-icon" />
+					</p:commandLink>
+
+					<p:commandLink class="grid-btn" oncomplete="PF('confirmation').show();" title="#{msg0['seUsers.label.deleteTitle']}" disabled="#{item.userId==1 or mainTemplateController.permissionsUser.seUsers lt 2}">
+						<f:setPropertyActionListener value="#{item}" target="#{seUsersController.seUser}" />
+						<i class="far fa-trash-alt grid-btn-icon" />
+					</p:commandLink>
+
+					<p:commandLink class="grid-btn" oncomplete="PF('unlock').show();" title="#{msg0['seUsers.label.unlockTitle']}" disabled="#{!item.isLocked or mainTemplateController.permissionsUser.seUsers lt 2}">
+						<f:setPropertyActionListener value="#{item}" target="#{seUsersController.seUser}" />
+						<i class="fa fa-user-lock grid-btn-icon" />
+					</p:commandLink>
+
+					<p:commandLink class="grid-btn" oncomplete="PF('resetPassword').show();" title="#{msg0['seUsers.label.resetPasswordTitle']}" disabled="#{mainTemplateController.permissionsUser.seUsers lt 2}">
+						<f:setPropertyActionListener value="#{item}" target="#{seUsersController.seUser}" />
+						<i class="fa fa-key grid-btn-icon" />
+					</p:commandLink>
+
+				</p:column>
+			</p:dataTable>
+
+		</div>
+		</div>
+	</h:form>
+
+	<h:form>
+		<p:confirmDialog message="#{msg0['seUsers.message.deleteConfirm']}" header="#{msg0['seUsers.label.deleteTitle']}" widgetVar="confirmation">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('confirmation').hide();" actionListener="#{seUsersController.delete}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('confirmation').hide();" type="button" />
+		</p:confirmDialog>
+		<p:confirmDialog message="#{msg0['seUsers.message.unLockConfirm']}" header="#{msg0['seUsers.label.unlockTitle']}" widgetVar="unlock">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('unlock').hide();" actionListener="#{seUsersController.unlock}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('unlock').hide();" type="button" />
+		</p:confirmDialog>
+		<p:confirmDialog message="#{msg0['seUsers.message.resetPasswordConfirm']}" header="#{msg0['seUsers.label.resetPasswordTitle']}" widgetVar="resetPassword">
+			<p:commandButton value="#{msg0['button.ok']}" update="@form" oncomplete="PF('resetPassword').hide();PF('sbInfoPassReset').show();" actionListener="#{seUsersController.resetPassword}" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('resetPassword').hide();" type="button" />
+		</p:confirmDialog>
+
+		<script>
+			function copyTitleToClipboard(elementId) {
+				var aux = document.createElement("input");
+				aux.setAttribute("value", document.getElementById(elementId).getAttribute("title"));
+				document.body.appendChild(aux);
+				aux.select();
+				document.execCommand("copy");
+				document.body.removeChild(aux);
+			}
+		</script>
+
+		<p:sidebar widgetVar="sbInfoPassReset" position="top" baseZIndex="10000" style="opacity: 0.95; height: 180px;">
+			<div style="margin:25px;">
+				<h:outputText value="#{msg0['seUsers.label.passwordReset']}" style="font-size:1.4em; color:#000" />
+
+				<i id="titleNewPassware" class="far fa-eye" title="#{seUsersController.newPassword}" style="font-size:1.2em; margin-left:5px;" />
+				<a href="#">
+					<i class="far fa-clipboard" title="#{msg0['label.copyToClipboard']}" onclick="copyTitleToClipboard('titleNewPassware');" style="font-size:1.2em; margin-left:5px;" />
+				</a>
+
+				<br/><br/>
+
+				<h:panelGroup rendered="#{not empty seUsersController.seUser.email}">
+					<h:outputText value="#{msg0['seUsers.label.passwordReset.send']}" style="font-size:1.1em; color:#000" /><br/>
+					<h:outputText value="#{msg0['label.to']}: #{seUsersController.seUser.formattedEmail}" style="font-size:1.1em; font-style: italic; color:#333" /><br/><br/>
+					<p:commandButton icon="far fa-paper-plane" value="#{msg0['button.send']}" actionListener="#{seUsersController.sendPassword()}" oncomplete="PF('sbInfoPassReset').hide();" />
+				</h:panelGroup>
+			</div>
+		</p:sidebar>
+
+		<p:sidebar widgetVar="sbInfoUserCreated" position="top" baseZIndex="10000" style="opacity: 0.95; height: 180px;">
+			<div style="margin:25px;">
+				<h:outputText value="#{msg0['seUsers.label.userCreated']}" style="font-size:1.4em; color:#000" />
+
+				<i id="titlePassware" class="far fa-eye" title="#{seUsersController.password}" style="font-size:1.2em; margin-left:5px;" />
+				<a href="#">
+					<i class="far fa-clipboard" title="#{msg0['label.copyToClipboard']}" onclick="copyTitleToClipboard('titlePassware');" style="font-size:1.2em; margin-left:5px;" />
+				</a>
+
+				<br/><br/>
+
+				<h:panelGroup rendered="#{not empty seUsersController.seUser.email}">
+					<h:outputText value="#{msg0['seUsers.label.userCreated.send']}" style="font-size:1.1em; color:#000" /><br/>
+					<h:outputText value="#{msg0['label.to']}: #{seUsersController.seUser.formattedEmail}" style="font-size:1.1em; font-style: italic; color:#333" /><br/><br/>
+					<p:commandButton icon="far fa-paper-plane" value="#{msg0['button.send']}" actionListener="#{seUsersController.sendWelcome()}" oncomplete="PF('sbInfoUserCreated').hide();" />
+				</h:panelGroup>
+			</div>
+		</p:sidebar>
+
+	</h:form>
+
+	<h:form prependId="false" rendered="#{seUsersController.editMode}" autocomplete="off">
+		<div class="panel-edit">
+			<div class="toolbar-container">
+				<div class="tb-left">
+					<p:commandLink id="btnReturn" action="#{seUsersController.cancel}" ajax="false" immediate="true">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-arrow-left" /><span class="btn-label">#{msg0['button.return']}</span></div>
+					</p:commandLink>
+				</div>
+				<div class="tb-right">
+					<p:commandLink id="btnSave" action="#{seUsersController.save}" ajax="false" rendered="#{mainTemplateController.permissionsUser.seUsers == 2}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-save" /><span class="btn-label">#{msg0['button.save']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnUndo" update=":msgs,@form" action="#{seUsersController.undoEdit()}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-undo" /><span class="btn-label">#{msg0['button.undo']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnDelete" onclick="PF('confirmation').show();" rendered="#{seUsersController.seUser.userId != null and mainTemplateController.permissionsUser.seUsers == 2}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-trash" /><span class="btn-label">#{msg0['button.delete']}</span></div>
+					</p:commandLink>
+				</div>
+			</div>
+
+			<div class="resp-form" style="margin-top: 20px;">
+
+				<h:outputLabel value="#{msg0['seUsers.field.username']}" for="username" styleClass="label" />
+				<p:inputText id="username" value="#{seUsersController.seUser.username}" maxlength="20" styleClass="control width-50" />
+
+				<h:outputLabel value="#{msg0['seUsers.field.seAccount']}" for="seAccount" styleClass="label" />
+				<p:selectOneMenu id="seAccount" value="#{seUsersController.accountId}" styleClass="control">
+					<f:selectItem itemLabel="#{msg0['label.select_default']}" itemValue="" />
+					<f:selectItems value="#{seUsersController.lstSeAccount}" var="item" itemLabel="#{item.name}" itemValue="#{item.accountId}" />
+				</p:selectOneMenu>
+
+				<h:outputLabel value="#{msg0['seUsers.field.lastname']}" for="lastname" styleClass="label" />
+				<p:inputText id="lastname" value="#{seUsersController.seUser.lastname}" maxlength="40" styleClass="control" />
+
+				<h:outputLabel value="#{msg0['seUsers.field.firstname']}" for="firstname" styleClass="label" />
+				<p:inputText id="firstname" value="#{seUsersController.seUser.firstname}" maxlength="40" styleClass="control" />
+
+				<h:outputLabel value="#{msg0['seUsers.field.email']}" for="email" styleClass="label" />
+				<p:inputText id="email" value="#{seUsersController.seUser.email}" maxlength="200" styleClass="control" />
+
+				<h:outputLabel value="#{msg0['seUsers.field.cellphone']}" for="cellphone" styleClass="label" />
+				<p:inputText id="cellphone" value="#{seUsersController.seUser.cellphone}" maxlength="40" styleClass="control" />
+
+				<div class="spacer" />
+
+				<h:outputLabel value="#{msg0['seUsers.field.maxSessions']}" for="maxSessions" styleClass="label" />
+				<div class="control" style="max-width:120px;">
+					<div class="input-number">
+					  <input type="button" value="-" class="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" />
+					  <p:inputText type="number" id="maxSessions" value="#{seUsersController.seUser.maxSessions}" />
+					  <input type="button" value="+" class="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" />
+				  </div>
+				</div>
+
+				<h:outputText value="#{msg0['seUsers.field.isKillPrevSession']}" style="vertical-align: middle;" styleClass="label-s" />
+				<p:selectBooleanCheckbox id="isKillPrevSession" value="#{seUsersController.seUser.isKillPrevSession}" styleClass="control-s" />
+
+				<h:outputLabel value="#{msg0['seUsers.field.maxInactiveInterval']}" for="maxInactiveInterval" styleClass="label" />
+				<div class="control" style="max-width:300px;">
+					<div class="input-number">
+					  <input type="button" value="-" class="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" />
+					  <p:inputText type="number" id="maxInactiveInterval" value="#{seUsersController.seUser.maxInactiveInterval}" maxlength="5" />
+					  <input type="button" value="+" class="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" />
+				  </div>
+				  <h:outputText value="seconds" style="margin-left:10px;" />
+				</div>
+
+				<div class="spacer" />
+
+				<h:outputLabel value="#{msg0['seUsers.field.sectores']}" for="sectors" styleClass="label" />
+				<p:selectCheckboxMenu id="sectors" value="#{seUsersController.lstSeSectorsSel}" label="#{msg0['seUsers.field.sectores']}" multiple="true"
+									  filter="true" filterMatchMode="startsWith" panelStyle="width:250px" styleClass="control">
+					<f:selectItems value="#{seUsersController.lstSeSectors}" var="item" itemLabel="#{item.label}" itemValue="#{item.value}" />
+				</p:selectCheckboxMenu>
+
+				<h:outputLabel value="#{msg0['seUsers.field.roles']}" for="roles" styleClass="label" />
+				<p:selectCheckboxMenu id="roles" value="#{seUsersController.lstSeRolesSel}" label="#{msg0['seUsers.field.roles']}" multiple="true"
+									  filter="true" filterMatchMode="startsWith" panelStyle="width:250px" styleClass="control">
+					<f:selectItems value="#{seUsersController.lstSeRoles}" var="item" itemLabel="#{item.label}" itemValue="#{item.value}" />
+				</p:selectCheckboxMenu>
+
+				<h:outputLabel value="#{msg0['seUsers.field.userLevel']}" for="userLevel" styleClass="label" />
+				<p:selectOneMenu id="userLevel" value="#{seUsersController.seUser.userLevel}" styleClass="control">
+					<f:selectItem itemLabel="" itemValue="-1" />
+					<f:selectItem itemLabel=">= 3" itemValue="3" />
+					<f:selectItem itemLabel=">= 2" itemValue="2" />
+					<f:selectItem itemLabel=">= 1" itemValue="1" />
+				</p:selectOneMenu>
+
+				<div class="spacer" />
+
+				<h:outputText value="#{msg0['seUsers.field.isActive']}" style="vertical-align: middle;" class="label-s" />
+				<p:selectBooleanCheckbox id="isActive" value="#{seUsersController.seUser.isActive}" class="control-s" />
+
+			</div>
+
+		</div>
+	</h:form>
+
+</ui:define>
+
+</ui:composition>
+
+</html>

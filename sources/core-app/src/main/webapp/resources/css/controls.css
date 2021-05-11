@@ -1,0 +1,299 @@
+/*-----------------------------------------------------------------------*/
+/*------------------------------- toolbars ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+.tab-container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #d8d8d8;
+	margin-bottom: 15px;
+}
+
+.tab-container .tb-left {
+	display: flex;
+	align-self: flex-end;
+	flex: 1;
+	white-space: nowrap;
+}
+
+.tab-container .tb-left > * {
+	align-self: flex-end;
+	margin-right: 3px;
+}
+
+.tab-container .tb-right {
+	display: flex;
+	align-self: flex-end;
+	flex: 0;
+	white-space: nowrap;
+}
+
+.tab-container .tb-right > * {
+	margin-left: 5px;
+	margin-bottom: 4px;
+}
+
+/*-----------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+.toolbar-container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #d8d8d8;
+	padding-bottom: 4px;
+	margin-bottom: 15px;
+}
+
+.toolbar-container .tb-left {
+	display: flex;
+	align-self: center;
+	flex: 1;
+	white-space: nowrap;
+}
+
+.toolbar-container .tb-left > * {
+	margin-right: 5px;
+}
+
+.toolbar-container .tb-right {
+	display: flex;
+	align-self: center;
+	flex: 0;
+	white-space: nowrap;
+}
+
+.toolbar-container .tb-right > * {
+	margin-left: 5px;
+}
+
+/*-----------------------------------------------------------------------*/
+/*------------------------------- buttons -------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+.btn {
+	border: 1px solid #0E6C90;
+	border-radius: 3px;
+	background-color: #0E6C90;
+	color: #ffffff;
+    line-height: 1.2;
+    display: inline-block;
+    padding: 6px 10px;
+    position: relative;
+    cursor: pointer;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-decoration: none !important;
+    text-align: center;
+    font-weight: normal !important;
+	transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover {
+	background: #128cba;
+	color: #ffffff;
+	border-color: #128cba;
+}
+
+.btn .btn-icon {
+	font-size: 11pt;
+}
+
+.btn .btn-label {
+	font-size: 11pt;
+	margin-left: 7px;
+}
+
+@media ( max-width : 640px) 
+{
+	.btn.btn-resp,
+	.btn.btn-resp-h {
+    	height: 42px;
+    	padding: 9px 14px;
+    	font-size: 13pt;
+	}
+	
+	.btn.btn-resp-h .btn-label {
+		display: none;
+	}
+}
+
+/*-----------------------------------------------------------------------*/
+.btn.btn-tab {
+	border: 1px solid #42a0c3;
+	border-radius: 10px 10px 0px 0px;
+	background-color: #42a0c3;
+	color: #ebebeb;
+}
+
+.btn.btn-tab.btn-active {
+	border: 1px solid #0E6C90;
+	border-radius: 10px 10px 0px 0px;
+	background-color: #0E6C90;
+	color: #ffffff;
+}
+
+.btn.btn-tab:hover,
+.btn.btn-tab.btn-active:hover {
+	border: 1px solid #0c5774;
+	background-color: #0c5774;
+	color: #fff;
+}
+
+.btn.btn-tab .btn-icon,
+.btn.btn-tab .btn-active .btn-icon {
+	font-size: 11pt;
+}
+
+.btn.btn-tab .btn-label,
+.btn.btn-tab.btn-active .btn-label {
+	font-size: 11pt;
+	margin-left: 7px;
+}
+
+/*-----------------------------------------------------------------------*/
+.notification-banner {
+	position: absolute;
+	right: 55px;
+	top: 16px;
+	text-align: center;
+	color: white;
+	opacity: .95;
+	animation: shake 1.2s cubic-bezier(.36, .07, .19, .97) both;
+	transform: translate3d(0, 0, 0);
+	backface-visibility: hidden;
+	perspective: 1000px;
+}
+
+.notification-banner .arrow-banner {
+	min-width: 150px;
+	max-width: 250px;
+	background-color: #e65100;
+	position: relative;
+	border: 1px solid #e65100;
+	border-radius: 7px;
+	padding: 5px 15px 5px;
+	vertical-align: middle;
+}
+
+.notification-banner .arrow-banner .arrow-right {
+	width: 0;
+	height: 0;
+	border-top: 8px solid transparent;
+	border-bottom: 8px solid transparent; /* 40px height (20+20) */
+	border-left: 15px solid #e65100;
+	position: absolute;
+	top: 6px;
+	right: -15px;
+}
+
+@keyframes shake {
+	10%, 90% {
+		transform: translate3d(-1px, 0, 0);
+	}
+	
+	20%, 80% {
+		transform: translate3d(2px, 0, 0);
+	}
+	
+	30%, 50%, 70% {
+		transform: translate3d(-4px, 0, 0);
+	}
+	
+	40%, 60% {
+		transform: translate3d(4px, 0, 0);
+	}
+}
+
+/*-----------------------------------------------------------------------*/
+
+.grid-btn ~ .grid-btn {
+	margin-left: 5px !important;
+}
+
+.grid-btn .grid-btn-icon {
+	display: inline-block;
+	border-radius: 50%;
+	height: 28px; 
+	width: 28px;
+	box-shadow: 0px 0px 2px #888;
+	padding: 0.5em 0.6em;
+	text-decoration: none;
+	color: #0b2f40;
+}
+
+.grid-btn .grid-btn-icon:hover {
+	background-color: #1183ae;
+	box-shadow: 0px 0px 2px #eee;
+	color: #fff;
+}
+
+.icon-btn {
+	display: inline-block;
+	border-radius: 50%;
+	height: 42px; 
+	width: 42px;
+	line-height: 30px;
+	box-shadow: 0px 0px 2px #555;
+	padding: 0.3em 0.4em;
+	color: #0c5774;
+	font-size: 1.6em;
+}
+
+.icon-btn:hover {
+	background-color: #1079a0;
+	box-shadow: 0px 0px 2px #eee;
+	color: #fff;
+}
+
+/*-----------------------------------------------------------------------*/
+/*-------------------------------- inputs -------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+.input-number {
+	box-sizing: border-box;
+	display: inline-flex;
+	border: 1px solid #ddd;
+}
+
+.input-number * {
+	box-sizing: border-box;
+}
+
+.input-number input[type=number] {
+	-webkit-appearance: textfield;
+	-moz-appearance: textfield;
+	appearance: textfield;
+	width: 80px;
+	height: 26px;
+	padding: 5px;
+	border: none;
+	text-align: center;
+}
+
+.input-number input[type=number]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+.input-number .button {
+	outline: none;
+	-webkit-appearance: none;
+	background-color: #f0f0f0;
+	border: none;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 26px;
+	cursor: pointer;
+	margin: 0;
+	position: relative;
+	font-family: sans-serif;
+	font-size: 1.4em;
+	vertical-align: top;
+}
+

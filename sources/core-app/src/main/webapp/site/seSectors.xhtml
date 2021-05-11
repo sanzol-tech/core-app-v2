@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="./mainTemplate.xhtml">
+
+<ui:define name="contentHead">
+	<title>#{constApp.product}.seSectors</title>
+</ui:define>
+
+<ui:define name="contentTitle"><span>#{msg0['seSectors.label.title']}</span></ui:define>
+
+<ui:define name="metadata">
+	<f:metadata>
+		<f:viewAction action="#{seSectorsController.pageLoad}" onPostback="false" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="content">
+
+	<h:form prependId="false" rendered="#{seSectorsController.displayMode}">
+
+		<div class="panel-display">
+		<div class="area-top">
+			<div class="toolbar-container">
+				<div class="tb-left">
+					<p:commandLink id="btnAdd" action="#{seSectorsController.add}" ajax="false" disabled="#{mainTemplateController.permissionsUser.seSectors lt 2}">
+						<div class="btn btn-resp"><i class="btn-icon fa fa-plus" /><span class="btn-label">#{msg0['button.new']}</span></div>
+					</p:commandLink>
+				</div>
+				<div class="tb-right">
+					<p:commandLink title="#{msg0['label.expandAll']}" actionListener="#{seSectorsController.expandAll}" update=":msgs,@form">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-expand" /><span class="btn-label">#{msg0['label.expandAll']}</span></div>
+					</p:commandLink>
+					<p:commandLink title="#{msg0['label.compressAll']}" actionListener="#{seSectorsController.colapseAll}" update=":msgs,@form">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-compress" /><span class="btn-label">#{msg0['label.compressAll']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnExport" action="#{seSectorsController.exportExcel}" ajax="false">
+						<div class="btn btn-resp"><i class="btn-icon fas fa-download" /><span class="btn-label">#{msg0['button.export']}</span></div>
+					</p:commandLink>
+				</div>
+			</div>
+
+			<p:treeTable id="tbl" value="#{seSectorsController.root}" var="item" style="margin-top:10px;"
+						 emptyMessage="#{msg0['label.grid_no_records']}"
+						 rowStyleClass="#{item.isActive ? null : 'inactiveRowTable'}">
+
+				<p:column headerText="#{msg0['seSectors.field.name']}">
+					<h:outputText value="#{item.name}" />
+				</p:column>
+
+				<p:column width="70" exportable="false" styleClass="cell-buttons">
+
+					<p:commandLink class="grid-btn" action="#{seSectorsController.edit}" ajax="false" title="#{msg0['seSectors.label.editTitle']}">
+						<f:setPropertyActionListener value="#{item}" target="#{seSectorsController.seSector}" />
+						<i class="far fa-edit grid-btn-icon" />
+					</p:commandLink>
+
+					<p:commandLink class="grid-btn" oncomplete="PF('confirmation').show();" title="#{msg0['seSectors.label.deleteTitle']}" disabled="#{mainTemplateController.permissionsUser.seSectors lt 2}">
+						<f:setPropertyActionListener value="#{item}" target="#{seSectorsController.seSector}" />
+						<i class="far fa-trash-alt grid-btn-icon" />
+					</p:commandLink>
+
+				</p:column>
+
+			</p:treeTable>
+
+		</div>
+		</div>
+	</h:form>
+
+	<h:form>
+		<p:confirmDialog message="#{msg0['seSectors.message.deleteConfirm']}" header="#{msg0['seSectors.label.deleteTitle']}" widgetVar="confirmation">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('confirmation').hide();" actionListener="#{seSectorsController.delete}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('confirmation').hide();" type="button" />
+		</p:confirmDialog>
+	</h:form>
+
+	<h:form prependId="false" rendered="#{seSectorsController.editMode}">
+		<div class="panel-edit">
+			<div class="toolbar-container">
+				<div class="tb-left">
+					<p:commandLink id="btnReturn" action="#{seSectorsController.cancel}" ajax="false" immediate="true">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-arrow-left" /><span class="btn-label">#{msg0['button.return']}</span></div>
+					</p:commandLink>
+				</div>
+				<div class="tb-right">
+					<p:commandLink id="btnSave" action="#{seSectorsController.save}" ajax="false" rendered="#{mainTemplateController.permissionsUser.seSectors == 2}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-save" /><span class="btn-label">#{msg0['button.save']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnUndo" update=":msgs,@form" action="#{seSectorsController.undoEdit()}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-undo" /><span class="btn-label">#{msg0['button.undo']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnDelete" onclick="PF('confirmation').show();" rendered="#{seSectorsController.seSector.sectorId != null and mainTemplateController.permissionsUser.seSectors == 2}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-trash" /><span class="btn-label">#{msg0['button.delete']}</span></div>
+					</p:commandLink>
+				</div>
+			</div>
+
+			<div class="resp-form" style="margin-top: 20px;">
+
+				<h:outputLabel value="#{msg0['seSectors.field.name']}" for="name" styleClass="label" />
+				<p:inputText id="name" value="#{seSectorsController.seSector.name}" maxlength="40" styleClass="control" />
+
+				<h:outputLabel value="#{msg0['seSectors.field.detail']}" for="detail" styleClass="label" />
+				<p:inputTextarea id="detail" value="#{seSectorsController.seSector.detail}" maxlength="200" rows="3" styleClass="control" />
+
+				<h:outputLabel value="#{msg0['seSectors.field.sectorPrev']}" for="sectorPrev" styleClass="label" />
+				<p:selectOneMenu id="sectorPrev" value="#{seSectorsController.sectorPrevId}" styleClass="control">
+					<f:selectItem itemLabel="#{msg0['label.select_default']}" itemValue="" />
+					<f:selectItems value="#{seSectorsController.lstSectorsPrev}" var="item" itemLabel="#{item.largeName}" itemValue="#{item.sectorId}" />
+				</p:selectOneMenu>
+
+				<div class="spacer" />
+
+				<h:outputLabel value="#{msg0['seSectors.field.isActive']}" for="isActive" styleClass="label-s" />
+				<p:selectBooleanCheckbox id="isActive" value="#{seSectorsController.seSector.isActive}" styleClass="control-s" />
+
+				<div class="spacer" />
+
+				<p:fieldset legend="#{msg0['seSectors.field.users']}" collapsed="true" toggleable="true" toggleSpeed="500" styleClass="control-full" >
+					<p:selectManyCheckbox id="users" value="#{seSectorsController.lstUserIdSel}" layout="grid" columns="1" style="white-space: nowrap;">
+						<f:selectItems value="#{seSectorsController.lstSeUsers}" var="item" itemLabel="#{item.username} - #{item.lastname}, #{item.firstname}" itemValue="#{item.userId}" />
+					</p:selectManyCheckbox>
+				</p:fieldset>
+
+			</div>
+
+		</div>
+	</h:form>
+
+</ui:define>
+
+</ui:composition>
+
+</html>

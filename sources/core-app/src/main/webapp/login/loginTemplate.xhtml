@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="no-store" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="-1" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/favicon/favicon.ico" />
+	<link rel="icon" type="image/png" sizes="16x16" href="#{request.contextPath}/resources/favicon/favicon-16x16.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="#{request.contextPath}/resources/favicon/favicon-32x32.png" />
+	<link rel="manifest" href="#{request.contextPath}/resources/favicon/manifest.json" />
+	<link rel="apple-touch-icon" sizes="180x180" href="#{request.contextPath}/resources/favicon/apple-icon-180x180.png" />
+
+	<link href="#{request.contextPath}/resources/fa/css/all.min.css?v=1.0.0" rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/login.css?v=1.0.0" rel="stylesheet" type="text/css" />
+
+	<script>
+		var timeZone = new Date().getTimezoneOffset();
+		function getDeviceInfo() {
+			return "{"
+				+ "\"window.innerSize\": \"" + window.innerWidth + "x" + window.innerHeight + "\", "
+				+ "\"window.outerSize\": \"" + window.outerWidth + "x" + window.outerHeight + "\", "
+				+ "\"window.devicePixelRatio\": \"" + window.devicePixelRatio + "\", "
+				+ "\"screen.size\": \"" + screen.width + "x" + screen.height + "\", "
+				+ "\"screen.availSize\": \"" + screen.availWidth + "x" + screen.availHeight + "\", "
+				+ "\"screen.colorDepth\": \"" + screen.colorDepth + "\", "
+				+ "\"screen.pixelDepth\": \"" + screen.pixelDepth + "\", "
+				+ "\"navigator.cookieEnabled\": \"" + navigator.cookieEnabled + "\", "
+				+ "\"navigator.language\": \"" + navigator.language + "\", "
+				+ "\"timeZone\": \"" + timeZone + "\""
+				+ "}"
+		}
+	</script>
+
+	<ui:insert name="contentHead" />
+</h:head>
+
+<h:body>
+	<ui:insert name="content" />
+</h:body>
+
+</html>

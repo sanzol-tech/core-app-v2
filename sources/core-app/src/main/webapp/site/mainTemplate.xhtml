@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	  xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="no-store" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="-1" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/favicon/favicon.ico" />
+	<link rel="icon" type="image/png" sizes="16x16" href="#{request.contextPath}/resources/favicon/favicon-16x16.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="#{request.contextPath}/resources/favicon/favicon-32x32.png" />
+	<link rel="manifest" href="#{request.contextPath}/resources/favicon/manifest.json" />
+	<link rel="apple-touch-icon" sizes="180x180" href="#{request.contextPath}/resources/favicon/apple-icon-180x180.png" />
+
+	<link href="#{request.contextPath}/resources/fa/css/all.min.css?v=1" rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/mainlayout.css?v=1" rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/common.css?v=1" rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/controls.css?v=1" rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/grids.css?v=1" rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/crud.css?v=1" rel="stylesheet" type="text/css" />
+
+	<ui:insert name="contentHead" />
+</h:head>
+
+<h:body>
+
+	<ui:insert name="metadata" />
+
+	<f:view locale="#{constApp.locale}">
+
+		<p:growl id="msgs" showSummary="false" showDetail="true" life="5000" />
+
+		<div id="layout-wrapper" class="layout-wrapper">
+
+			<h:form prependId="false">
+			<div class="layout-topbar">
+				<div class="topbar-left">
+					<a id="menu-button" href="#">
+						<span id="spanMenuBtn" class="fa fa-angle-left"></span>
+					</a>
+				</div>
+				<div class="topbar-title">
+					<h:graphicImage value="/resources/images/logo.svg" style="height:40px" />
+					<span style="text-overflow: ellipsis; margin-left:10px;">#{constApp.title}</span>
+				</div>
+				<div class="topbar-right">
+					<h:panelGroup id="notifications">
+						<div class="notification-banner" style="display:#{(mainTemplateController.notificationSubscriber.unreadCount gt 0)?'block':'none'}">
+							<div class="arrow-banner">
+							  <i class="fa fa-comment-alt" style="margin-right:7px;" />
+							  <span>#{mainTemplateController.notificationSubscriber.unreadCount} #{msg0['mainTemplate.label.notificationsCount']}</span>
+							  <div class="arrow-right"></div>
+							</div>
+						</div>
+					</h:panelGroup>
+
+					<h:link id="topbar-menu-button" href="#">
+						<span class="fa fa-ellipsis-h"></span>
+					</h:link>
+					<p:menu overlay="true" trigger="topbar-menu-button" my="left top" at="left bottom" style="width:220px;">
+						<p:menuitem value="#{msg1['menu.seNotificationsInbox']}" outcome="/site/seNotificationsInbox.xhtml" icon="fa fa-comment-alt" rendered="#{mainTemplateController.permissionsUser.seNotificationsInbox ge 1}" />
+						<p:menuitem value="#{msg1['menu.seAudit']}" outcome="/site/seAudit.xhtml" icon="fa fa-search" rendered="#{mainTemplateController.permissionsUser.seAudit ge 1}" />
+						<p:menuitem value="#{msg1['menu.sePassword']}" outcome="/site/sePasswordChange.xhtml" icon="fa fa-lock" />
+						<p:menuitem value="#{msg1['menu.exit']}" icon="fa fa-power-off" action="#{mainTemplateController.logout()}" />
+					</p:menu>
+				</div>
+			</div>
+			</h:form>
+
+			<div id="layout-sidebar" class="layout-sidebar layout-sidebar-inactive">
+			<h:form prependId="false">
+				<div class="sidebar-header">
+					<i class="fa fa-user fa-xs" style="color:#bbb; margin-right:3px;" />
+					<span>#{mainTemplateController.user.username}</span>
+				</div>
+
+				<div class="sidebar-nav">
+					<ul id="nav" class="sidebar-nav-container">
+						<h:outputText value="#{mainTemplateController.renderedMenu}" escape="false" />
+					</ul>
+				</div>
+			</h:form>
+			</div>
+
+			<script>
+				$(document).ready(function () {
+					$( '#menu-button' ).on( "click", btnMenuClick );
+					$( '#nav > li > a' ).on( "click", toggleSubMenuItem );
+				});
+				function btnMenuClick() {
+					if ($('#layout-wrapper').hasClass('active')) {
+						closeSidebar();
+					} else {
+						openSidebar();
+					}
+				}
+				function openSidebar() {
+					$('#layout-wrapper').addClass('active');
+					$('#layout-sidebar').removeClass('layout-sidebar-inactive');
+					$('#layout-sidebar').addClass('layout-sidebar-active');
+					$('#layout-content').removeClass('layout-content-inactive');
+					$('#layout-content').addClass('layout-content-active');
+					//change icon button
+					$('#spanMenuBtn').removeClass('fa-angle-left');
+					$('#spanMenuBtn').addClass('fa-angle-right');
+				}
+				function closeSidebar() {
+					$('#layout-wrapper').removeClass('active');
+					$('#layout-sidebar').removeClass('layout-sidebar-active');
+					$('#layout-sidebar').addClass('layout-sidebar-inactive');
+					$('#layout-content').removeClass('layout-content-active');
+					$('#layout-content').addClass('layout-content-inactive');
+					//change icon button
+					$('#spanMenuBtn').removeClass('fa-angle-right');
+					$('#spanMenuBtn').addClass('fa-angle-left');
+					//close slidebar
+					$('#nav li a').removeClass('active');
+					$('#nav li a').next().slideUp();
+				}
+				function toggleSubMenuItem() {
+					if ($(this).hasClass('active')) {
+						$('#nav li a').removeClass('active');
+						$(this).next().slideToggle();
+						closeSidebar();
+					} else {
+						$('#nav li ul').slideUp();
+						$(this).next().slideToggle();
+						$('#nav li a').removeClass('active');
+						$(this).addClass('active');
+						openSidebar();
+					}
+				}
+			</script>
+
+			<div id="layout-content" class="layout-content layout-content-inactive">
+
+				<div class="title">
+					<ui:insert name="contentTitle" />
+
+					<p:ajaxStatus id="ajaxStatusPanel" style="vertical-align: middle; display: inline-block;">
+						<f:facet name="start">
+							<i class="fa fa-spinner fa-spin" style="margin-left: 15px; color: #111; font-size: 26px; z-index: 10;" />
+						</f:facet>
+						<f:facet name="complete">
+							<h:outputText value="" />
+						</f:facet>
+					</p:ajaxStatus>
+				</div>
+
+				<div style="padding: 5px 10px;">
+					<ui:insert name="content" />
+				</div>
+
+			</div>
+
+		</div>
+
+	</f:view>
+</h:body>
+
+</html>

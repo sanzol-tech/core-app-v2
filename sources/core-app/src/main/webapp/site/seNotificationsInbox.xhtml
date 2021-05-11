@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui"
+	  xmlns:s="http://sanzol.com.ar/ui">
+
+<ui:composition template="./mainTemplate.xhtml">
+
+<ui:define name="contentHead">
+	<title>#{constApp.product}.seNotificationsInbox</title>
+
+	<style>
+		.card-panel	{
+			border-radius: 3px;
+			box-shadow: 0 1px 1px -1px rgb(0 0 0 / 16%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
+			margin-top:10px;
+			padding:10px;
+		}
+		.card-panel .card-grid {
+			display: grid;
+			grid-template-columns: 40px auto 70px;
+			column-gap: 5px;
+			justify-items: stretch;
+		}
+	</style>
+
+</ui:define>
+
+<ui:define name="contentTitle"><span>#{msg0['seNotificationsInbox.label.title']}</span></ui:define>
+
+<ui:define name="metadata">
+	<f:metadata>
+		<f:viewAction action="#{seNotificationsInboxController.pageLoad}" onPostback="false" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="content">
+	<h:form id="frm">
+		<div class="panel-display">
+		<div class="area-top">
+
+			<div class="toolbar-container" style="margin-bottom:20px;">
+				<p:selectOneMenu id="fltDateRange" value="#{seNotificationsInboxController.dateRange}" appendTo="@parent" styleClass="control">
+					<p:ajax update=":msgs,@form" listener="#{seNotificationsInboxController.refresh()}" />
+					<f:selectItems value="#{seNotificationsInboxController.lstDateRanges}" var="item" itemLabel="#{item.label}" itemValue="#{item.value}" />
+				</p:selectOneMenu>
+			</div>
+
+			<p:repeat id="tbl" value="#{seNotificationsInboxController.lstSeNotificationsUsers}" var="item">
+
+				<h:panelGroup id="item" layout="block" styleClass="card-panel" rendered="#{item.deletedDate == null}">
+					<div class="card-grid">
+						<div style="justify-self: center; align-self: center;">
+							<h:outputText styleClass="#{item.seNotification.seNotificationType.icon} fa-2x"
+										  style="color:#{item.seNotification.seNotificationType.iconColor}; margin-right: 10px;"
+										  rendered="#{not empty item.seNotification.seNotificationType.icon}" />
+						</div>
+
+						<div style="place-self: center stretch;">
+							<div style="margin-bottom: 5px;">
+								<h:panelGroup styleClass="#{item.readedDate == null ? 'text-bold' : null}">
+									<s:outputDate value="#{item.seNotification.notificationDate}" format="DATE_TIME_SHORT" />
+								</h:panelGroup>
+								<h:panelGroup rendered="#{item.readedDate != null}" style="margin-left:10px;">
+									<i class="fa fa-check-double grid-btn-icon" style="color:#1976d2;" />
+								</h:panelGroup>
+							</div>
+							<div>
+								<h:outputText value="#{item.seNotification.message}" style="white-space: pre-wrap;" />
+							</div>
+						</div>
+
+						<div style="justify-self: center; align-self: center;">
+
+							<p:commandLink styleClass="grid-btn" update=":notifications,@parent" action="#{seNotificationsInboxController.setReaded(item.notificationUserId)}" title="#{msg0['seNotificationsInbox.label.MarkAsRead']}" rendered="#{item.readedDate == null}">
+								<i class="fa fa-check-double grid-btn-icon" />
+							</p:commandLink>
+
+							<p:commandLink styleClass="grid-btn" oncomplete="PF('confirmation').show();" title="#{msg0['seNotificationsInbox.label.deleteTitle']}" disabled="#{mainTemplateController.permissionsUser.seNotificationsInbox lt 2}">
+								<f:setPropertyActionListener value="#{item}" target="#{seNotificationsInboxController.seNotificationUser}" />
+								<i class="far fa-trash-alt grid-btn-icon" />
+							</p:commandLink>
+
+						</div>
+					</div>
+				</h:panelGroup>
+
+			</p:repeat>
+
+		</div>
+		</div>
+	</h:form>
+
+	<h:form>
+		<p:confirmDialog message="#{msg0['seNotificationsInbox.message.deleteConfirm']}" header="#{msg0['seNotificationsInbox.label.deleteTitle']}" widgetVar="confirmation">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('confirmation').hide();" actionListener="#{seNotificationsInboxController.delete}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('confirmation').hide();" type="button" />
+		</p:confirmDialog>
+	</h:form>
+
+</ui:define>
+
+</ui:composition>
+
+</html>

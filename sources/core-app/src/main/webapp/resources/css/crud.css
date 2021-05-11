@@ -1,0 +1,126 @@
+/*-----------------------------------------------------------------------*/
+/*----------------------------- DISPLAY AREA ----------------------------*/
+/*-----------------------------------------------------------------------*/
+
+.panel-display {
+	min-width: 320px;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: 1fr, auto;
+	grid-template-areas: "top top" "left right";
+	column-gap: 5px;
+	row-gap: 5px;
+	padding: 5px;
+}
+
+.panel-display .area-top {
+	grid-area: top;
+}
+
+.panel-display .area-left {
+	grid-area: left;
+}
+
+.panel-display .area-left>* {
+	min-height: calc(100vh - 250px);
+	width: 180px;
+}
+
+.panel-display .area-right {
+	grid-area: right;
+}
+
+@media ( max-width : 640px) 
+{	
+	.panel-display {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		grid-template-rows: auto;
+		grid-template-areas: "top top" "left left" "right right";
+		column-gap: 5px;
+		row-gap: 5px;
+	}
+	.panel-display .area-top {
+		grid-area: top;
+	}
+	.panel-display .area-left {
+		grid-area: left;
+		width: 100%;
+	}
+	.panel-display .area-left>* {
+		width: 100%;
+		min-height: 80px;
+		height: 100%;
+	}
+	.panel-display .area-right {
+		grid-area: right;
+		margin-top: 30px;
+	}
+}
+
+/*-----------------------------------------------------------------------*/
+/*----------------------------- FILTER PANEL ----------------------------*/
+/*-----------------------------------------------------------------------*/
+
+@media ( min-width : 641px) 
+{
+	.panel-filter {
+		border: 1px solid #c8c8c8;
+		border-radius: 3px;
+		padding: 5px;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		margin-top: 5px;
+	}
+	.panel-filter .pf-item {
+		display: flex;
+		align-items: center;
+		margin-right: 10px;
+	}
+	.panel-filter .pf-item-right {
+		display: flex;
+		align-items: center;
+		margin-right: 10px;
+		flex-grow: 1;
+		justify-content: flex-end;
+	}
+	.panel-filter .pf-item .label {
+		margin: 5px;
+	}
+	.panel-filter .pf-item .control {
+		margin: 5px;
+	}
+}
+
+@media ( max-width : 640px) 
+{
+	.panel-filter {
+		font-size: 14px;
+		padding-bottom: 5px;
+	}
+	.panel-filter .pf-item {
+
+	}
+	.panel-filter .pf-item-right {
+
+	}
+	.panel-filter .pf-item .label {
+		display: block;
+		margin: 10px 0 5px 0;
+	}
+	.panel-filter .pf-item .control {
+		display: block;
+		width: 100%;
+		max-width: 100%;
+		margin-bottom: 10px;
+	}
+}
+
+/*-----------------------------------------------------------------------*/
+/*------------------------------ EDIT AREA ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+.panel-edit {
+	margin: 5px;
+}

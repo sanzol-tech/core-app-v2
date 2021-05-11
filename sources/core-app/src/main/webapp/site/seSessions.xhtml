@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="./mainTemplate.xhtml">
+
+<ui:define name="contentHead">
+	<title>#{constApp.product}.seSessions</title>
+</ui:define>
+
+<ui:define name="contentTitle"><span>#{msg0['seSessions.label.title']}</span></ui:define>
+
+<ui:define name="metadata">
+	<f:metadata>
+		<f:viewAction action="#{seSessionsController.pageLoad}" onPostback="false" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="content">
+
+	<h:form prependId="false" id="frm">
+		<div class="panel-display">
+		<div class="area-top">
+
+			<p:poll interval="30" update="tbl" />
+
+			<p:dataTable id="tbl" value="#{seSessionsController.lstAuthSession}" var="item" reflow="true">
+
+				<p:column headerText="#{msg0['seSessions.field.user']}">
+					<h:outputText value="#{item.seUser.username}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seSessions.field.creationTime']}">
+					<h:outputText value="#{item.creationTime}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seSessions.field.lastAccessedTime']}">
+					<h:outputText value="#{item.lastAccessedTime}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seSessions.field.remoteAddress']}">
+					<h:outputText value="#{item.remoteAddress}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seSessions.field.operatingSystem']}">
+					<h:outputText value="#{item.operatingSystem}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['seSessions.field.browser']}">
+					<h:outputText value="#{item.browser}" />
+				</p:column>
+
+				<p:column width="30" exportable="false" style="text-align:right;">
+
+					<p:commandLink class="grid-btn" oncomplete="PF('confirmation').show();" title="#{msg0['seSessions.label.killTitle']}" disabled="#{mainTemplateController.permissionsUser.seSessions lt 2}">
+						<f:setPropertyActionListener value="#{item}" target="#{seSessionsController.authSession}" />
+						<i class="fa fa-power-off grid-btn-icon" />
+					</p:commandLink>
+
+				</p:column>
+
+			</p:dataTable>
+
+			<p:confirmDialog message="#{msg0['seSessions.message.killConfirm']}" header="#{msg0['seSessions.label.killTitle']}" widgetVar="confirmation">
+
+				<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('confirmation').hide();" actionListener="#{seSessionsController.killSession}" ajax="false" />
+				<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('confirmation').hide();" type="button" />
+
+			</p:confirmDialog>
+
+		</div>
+		</div>
+	</h:form>
+
+</ui:define>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="./mainTemplate.xhtml">
+
+<ui:define name="contentHead">
+	<title>#{constApp.product}.seServerInfo</title>
+
+	<style>
+		.infoserver-important {
+			font-weight: bold;
+		}
+		.infoserver-warn {
+			color: orange;
+		}
+		.infoserver-error {
+			color: red;
+		}
+	</style>
+</ui:define>
+
+<ui:define name="contentTitle">
+	<span>#{msg0['seServerInfo.label.title']}</span>
+</ui:define>
+
+<ui:define name="metadata">
+	<f:metadata>
+		<f:viewAction action="#{seServerInfoController.pageLoad}" onPostback="false" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="content">
+
+	<p:poll widgetVar="poll" interval="5" update=":msgs,pnl" listener="#{seServerInfoController.refresh()}" />
+
+	<h:panelGroup id="pnl">
+
+		<p:panel style="margin:15px 5px 0;">
+			<f:facet name="header" >
+				<i class="fa fa-desktop" style="margin-right:10px;" /><span>ENVIRONMENT</span>
+			</f:facet>
+			<div class="resp-form-table">
+				<p:repeat value="#{seServerInfoController.lstInfoEnvironment}" var="item">
+					<div class="label">
+						<h:outputText value="#{item.key}" />
+					</div>
+					<div class="control">
+						<h:outputText value="#{item.value}" styleClass="#{item.cssClass}" />
+					</div>
+				</p:repeat>
+			</div>
+		</p:panel>
+
+		<p:panel style="margin:15px 5px 0;">
+			<f:facet name="header" >
+				<i class="fa fa-database" style="margin-right:10px;" /><span>DB</span>
+			</f:facet>
+			<div class="resp-form-table">
+				<p:repeat value="#{seServerInfoController.lstInfoDB}" var="item">
+					<div class="label">
+						<h:outputText value="#{item.key}" />
+					</div>
+					<div class="control">
+						<h:outputText value="#{item.value}" styleClass="#{item.cssClass}" />
+					</div>
+				</p:repeat>
+			</div>
+		</p:panel>
+
+		<p:panel style="margin:15px 5px 0;">
+			<f:facet name="header" >
+				<i class="far fa-clock" style="margin-right:10px;" /><span>TIME</span>
+			</f:facet>
+			<div class="resp-form-table">
+				<p:repeat value="#{seServerInfoController.lstInfoTime}" var="item">
+					<div class="label">
+						<h:outputText value="#{item.key}" />
+					</div>
+					<div class="control">
+						<h:outputText value="#{item.value}" styleClass="#{item.cssClass}" />
+					</div>
+				</p:repeat>
+			</div>
+		</p:panel>
+
+		<p:panel style="margin:15px 5px 0;">
+			<f:facet name="header" >
+				<i class="fa fa-microchip" style="margin-right:10px;" /><span>CPU</span>
+			</f:facet>
+			<div class="resp-form-table">
+				<p:repeat value="#{seServerInfoController.lstInfoCPU}" var="item">
+					<div class="label">
+						<h:outputText value="#{item.key}" />
+					</div>
+					<div class="control">
+						<h:outputText value="#{item.value}" styleClass="#{item.cssClass}" />
+					</div>
+				</p:repeat>
+			</div>
+		</p:panel>
+
+		<p:panel style="margin:15px 5px 0;">
+			<f:facet name="header" >
+				<i class="fa fa-sd-card" style="margin-right:10px;" /><span>MEMORY</span>
+			</f:facet>
+			<div class="resp-form-table">
+				<p:repeat value="#{seServerInfoController.lstInfoMem}" var="item">
+					<div class="label">
+						<h:outputText value="#{item.key}" />
+					</div>
+					<div class="control">
+						<h:outputText value="#{item.value}" styleClass="#{item.cssClass}" />
+					</div>
+				</p:repeat>
+			</div>
+		</p:panel>
+
+		<p:panel header="DISK" style="margin:15px 5px 0;">
+			<f:facet name="header" >
+				<i class="fa fa-hdd" style="margin-right:10px;" /><span>DISK</span>
+			</f:facet>
+			<div class="resp-form-table" style="overflow-x:scroll;">
+				<p:repeat value="#{seServerInfoController.lstInfoDisk}" var="item">
+					<div class="label">
+						<h:outputText value="#{item.key}" />
+					</div>
+					<div class="control">
+						<h:outputText value="#{item.value}" style="white-space: pre;" styleClass="#{item.cssClass}" />
+					</div>
+				</p:repeat>
+			</div>
+		</p:panel>
+
+		<p:panel header="NETWORK" style="margin:15px 5px 0;">
+			<f:facet name="header" >
+				<i class="fa fa-ethernet" style="margin-right:10px;" /><span>NETWORK</span>
+			</f:facet>
+			<div class="resp-form-table" style="overflow-x:scroll;">
+				<p:repeat value="#{seServerInfoController.lstInfoNet}" var="item">
+					<div class="label">
+						<h:outputText value="#{item.key}" />
+					</div>
+					<div class="control">
+						<h:outputText value="#{item.value}" style="white-space: pre;" styleClass="#{item.cssClass}" />
+					</div>
+				</p:repeat>
+			</div>
+		</p:panel>
+
+	</h:panelGroup>
+
+</ui:define>
+
+</ui:composition>
+
+</html>

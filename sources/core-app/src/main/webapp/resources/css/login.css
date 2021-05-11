@@ -1,0 +1,105 @@
+html {
+	height: 100%;
+}
+
+body {
+	font-family: "Open Sans", "Helvetica Neue", sans-serif;
+	font-size: 10pt;
+	background-color: #fff;
+	color: #333;
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	min-height: 360px;
+}
+
+/*-----------------------------------------------------------------------*/
+div.background {
+	box-sizing: border-box;
+	height: 45vh;
+	min-height: 100px;
+	vertical-align: middle;
+	padding: 20px 20px 5px 10px;
+	white-space: nowrap;
+	font-size: 36pt;
+	line-height: 1;
+}
+
+.fondoerr {
+	background-color: #e62a10;
+	background-image: linear-gradient(to right, #e62a10, #e62a10);
+	color: #E57162;
+}
+
+.fondook {
+	background: rgb(17, 160, 196);
+	background: radial-gradient(circle, rgba(17, 160, 196, 1) 0%, rgba(9, 48, 83, 1) 100%);
+	color: #ffffff;
+}
+
+/*-----------------------------------------------------------------------*/
+.center-container {
+	position: fixed;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -45%);
+	max-width: 98%;
+}
+
+.panel {
+	box-sizing: border-box;
+	box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, 0.26), 0 1px 5px 0 rgba(0, 0, 0, 0.16);
+	border-radius: 2px;
+	background-color: #fbfcff;
+	min-width: 240px; 
+	padding: 30px;
+}
+
+.panel .title-container {
+	margin-bottom: 30px; 
+	text-align: center;
+}
+
+.panel .buttons-container {
+	margin-top: 40px; 
+	text-align: center;
+}
+
+.panel .field-container {
+	margin-bottom: 10px;
+	width: 240px; 
+	max-width: 100%; 
+}
+
+.panel .field-container-big {
+	margin-bottom: 10px;
+	width: 320px; 
+	max-width: 100%; 
+}
+
+.panel .field-container .field-label, .panel .field-container-big .field-label {
+	display: block;
+	margin-bottom: 3px;
+	color: #666;
+}
+
+.panel .field-container .message, .panel .field-container-big .message {
+	display: block;
+	color: #a80000;
+	font-size: .9em;
+}
+
+.linkButton {
+	background-color: #E57162;
+	color: #fff;
+	border-radius: 5px;
+	padding: 6px 12px 6px 12px;
+	border: 0 none;
+	box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, 0.26), 0 1px 5px 0 rgba(0, 0, 0, 0.16);
+	transition: background-color 0.3s;
+}
+
+.linkButton:hover {
+	background-color: #e05a47;
+	color: #fff;
+}

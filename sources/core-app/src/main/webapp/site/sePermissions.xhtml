@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="./mainTemplate.xhtml">
+
+<ui:define name="contentHead">
+	<title>#{constApp.product}.sePermissions</title>
+</ui:define>
+
+<ui:define name="contentTitle"><span>#{msg0['sePermissions.label.title']}</span></ui:define>
+
+<ui:define name="metadata">
+	<f:metadata>
+		<f:viewAction action="#{sePermissionsController.pageLoad}" onPostback="false" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="content">
+
+	<h:form prependId="false" id="frm" rendered="#{sePermissionsController.displayMode}">
+		<div class="panel-display">
+		<div class="area-top">
+			<div class="toolbar-container">
+				<div class="tb-left">
+					<p:commandLink id="btnAdd" action="#{sePermissionsController.add}" ajax="false" disabled="#{mainTemplateController.permissionsUser.sePermissions lt 2}">
+						<div class="btn btn-resp"><i class="btn-icon fa fa-plus" /><span class="btn-label">#{msg0['button.new']}</span></div>
+					</p:commandLink>
+				</div>
+				<div class="tb-right">
+					<h:link id="btnExport" href="#">
+						<div class="btn btn-resp"><i class="btn-icon fa fa-arrow-down" /><span class="btn-label">#{msg0['button.export']}</span></div>
+					</h:link>
+					<p:menu overlay="true" trigger="btnExport" my="left top" at="left bottom">
+						<p:menuitem value="Excel" onclick="PF('xlsExport').jq.click();" />
+						<p:menuitem value="CSV" onclick="PF('csvExport').jq.click();" />
+					</p:menu>
+					<p:commandButton widgetVar="xlsExport" ajax="false" style="display:none;">
+						<p:dataExporter type="xlsx" target="tbl" fileName="#{msg0['sePermissions.label.exportFilename']}" postProcessor="#{sePermissionsController.postProcessXLSX}" />
+					</p:commandButton>
+					<p:commandButton widgetVar="csvExport" ajax="false" style="display:none;">
+						<p:dataExporter type="csv" target="tbl" fileName="#{msg0['sePermissions.label.exportFilename']}" postProcessor="#{sePermissionsController.postProcessCSV}" encoding="ISO-8859-1" />
+					</p:commandButton>
+				</div>
+			</div>
+
+			<p:dataTable id="tbl" value="#{sePermissionsController.lstSePermissions}" var="item"
+						 style="margin-top:10px;" rows="15" paginator="true" rowsPerPageTemplate="15,50,100,200"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 emptyMessage="#{msg0['label.grid_no_records']}"
+						 rowStyleClass="#{item.isActive ? null : 'inactiveRowTable'}">
+
+				<p:column headerText="#{msg0['sePermissions.field.category']}" sortBy="#{item.category}" width="100" priority="3">
+					<h:outputText value="#{item.category}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['sePermissions.field.name']}" sortBy="#{item.name}">
+					<h:outputText value="#{item.name}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['sePermissions.field.userLevel']}" sortBy="#{item.userLevel}" width="100" priority="3" style="text-align:center;">
+					<h:outputText value="#{item.userLevel}" />
+				</p:column>
+
+				<p:column headerText="#{msg0['sePermissions.field.isUserDefined']}" sortBy="#{item.isUserDefined}" width="120" priority="4" style="text-align:center;">
+					<h:outputText value="#{msg0['label.yes']}" rendered="#{item.isUserDefined}" />
+				</p:column>
+
+				<p:column width="70" exportable="false" styleClass="cell-buttons">
+
+					<p:commandLink class="grid-btn" action="#{sePermissionsController.edit}" ajax="false" title="#{msg0['sePermissions.label.editTitle']}" disabled="#{!item.isUserDefined}">
+						<f:setPropertyActionListener value="#{item}" target="#{sePermissionsController.sePermission}" />
+						<i class="far fa-edit grid-btn-icon" />
+					</p:commandLink>
+
+					<p:commandLink class="grid-btn" oncomplete="PF('confirmation').show();" title="#{msg0['sePermissions.label.deleteTitle']}" disabled="#{!item.isUserDefined or mainTemplateController.permissionsUser.seRoles lt 2}">
+						<f:setPropertyActionListener value="#{item}" target="#{sePermissionsController.sePermission}" />
+						<i class="far fa-trash-alt grid-btn-icon" />
+					</p:commandLink>
+
+				</p:column>
+
+			</p:dataTable>
+
+		</div>
+		</div>
+	</h:form>
+
+	<h:form>
+		<p:confirmDialog message="#{msg0['sePermissions.message.deleteConfirm']}" header="#{msg0['sePermissions.label.deleteTitle']}" widgetVar="confirmation">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('confirmation').hide();" actionListener="#{sePermissionsController.delete}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('confirmation').hide();" type="button" />
+		</p:confirmDialog>
+	</h:form>
+
+	<h:form prependId="false" rendered="#{sePermissionsController.editMode}">
+		<div class="panel-edit">
+			<div class="toolbar-container">
+				<div class="tb-left">
+					<p:commandLink id="btnReturn" action="#{sePermissionsController.cancel}" ajax="false" immediate="true">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-arrow-left" /><span class="btn-label">#{msg0['button.return']}</span></div>
+					</p:commandLink>
+				</div>
+				<div class="tb-right">
+					<p:commandLink id="btnSave" action="#{sePermissionsController.save}" ajax="false" rendered="#{mainTemplateController.permissionsUser.sePermissions == 2}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-save" /><span class="btn-label">#{msg0['button.save']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnUndo" update=":msgs,@form" action="#{sePermissionsController.undoEdit()}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-undo" /><span class="btn-label">#{msg0['button.undo']}</span></div>
+					</p:commandLink>
+					<p:commandLink id="btnDelete" onclick="PF('confirmation').show();" rendered="#{sePermissionsController.sePermission.permissionId != null and mainTemplateController.permissionsUser.sePermissions == 2}">
+						<div class="btn btn-resp-h"><i class="btn-icon fa fa-trash" /><span class="btn-label">#{msg0['button.delete']}</span></div>
+					</p:commandLink>
+				</div>
+			</div>
+
+			<div class="resp-form" style="margin-top: 20px;">
+
+				<h:outputLabel value="#{msg0['sePermissions.field.name']}" for="name" styleClass="label" />
+				<p:inputText id="name" value="#{sePermissionsController.sePermission.name}" maxlength="40" styleClass="control" />
+
+				<h:outputLabel value="#{msg0['sePermissions.field.detail']}" for="detail" styleClass="label" />
+				<p:inputTextarea id="detail" value="#{sePermissionsController.sePermission.detail}" rows="3" maxlength="200" styleClass="control" />
+
+				<h:outputLabel value="#{msg0['sePermissions.field.category']}" for="category" styleClass="label" />
+				<p:inputText id="category" value="#{sePermissionsController.sePermission.category}" maxlength="20" styleClass="control" />
+
+				<h:outputLabel value="#{msg0['sePermissions.field.userLevel']}" for="userLevel" styleClass="label" />
+				<p:selectOneMenu id="userLevel" value="#{sePermissionsController.sePermission.userLevel}" styleClass="control">
+					<f:selectItem itemLabel="" itemValue="-1" />
+					<f:selectItem itemLabel=">= 3" itemValue="3" />
+					<f:selectItem itemLabel=">= 2" itemValue="2" />
+					<f:selectItem itemLabel=">= 1" itemValue="1" />
+				</p:selectOneMenu>
+
+				<div class="spacer" />
+
+				<h:outputLabel value="#{msg0['sePermissions.field.isActive']}" for="isActive" styleClass="label-s" />
+				<p:selectBooleanCheckbox id="isActive" value="#{sePermissionsController.sePermission.isActive}" styleClass="control-s" />
+
+			</div>
+
+		</div>
+	</h:form>
+
+</ui:define>
+
+</ui:composition>
+
+</html>

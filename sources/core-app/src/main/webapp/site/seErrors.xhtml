@@ -65,7 +65,7 @@
 				</p:column>
 
 				<p:column width="30" exportable="false" styleClass="cell-buttons">
-					<p:commandLink class="grid-btn" update=":msgs,:frm:display" oncomplete="PF('sidebarDialog').show();" title="#{msg0['label.detail']}">
+					<p:commandLink styleClass="grid-btn" update=":msgs,:frm:display" oncomplete="PF('sidebarDialog').show();" title="#{msg0['label.detail']}">
 						<i class="fa fa-search fa-lg" />
 						<f:setPropertyActionListener value="#{item}" target="#{seErrorsController.seError}" />
 					</p:commandLink>

@@ -57,7 +57,7 @@
 
 				<p:column width="30" exportable="false" style="text-align:right;">
 
-					<p:commandLink class="grid-btn" action="#{sePropertiesController.edit}" ajax="false" title="#{msg0['seProperties.label.editTitle']}" disabled="#{item.sourceType.name()!='DB'}">
+					<p:commandLink styleClass="grid-btn" action="#{sePropertiesController.edit}" ajax="false" title="#{msg0['seProperties.label.editTitle']}" disabled="#{item.sourceType.name()!='DB'}">
 						<f:setPropertyActionListener value="#{item}" target="#{sePropertiesController.property}" />
 						<i class="far fa-edit grid-btn-icon" />
 					</p:commandLink>

@@ -53,12 +53,12 @@
 
 				<p:column width="70" exportable="false" styleClass="cell-buttons">
 
-					<p:commandLink class="grid-btn" action="#{seRolesController.edit}" ajax="false" title="#{msg0['seRoles.label.editTitle']}">
+					<p:commandLink styleClass="grid-btn" action="#{seRolesController.edit}" ajax="false" title="#{msg0['seRoles.label.editTitle']}">
 						<f:setPropertyActionListener value="#{item}" target="#{seRolesController.seRole}" />
 						<i class="far fa-edit grid-btn-icon" />
 					</p:commandLink>
 
-					<p:commandLink class="grid-btn" oncomplete="PF('confirmation').show();" title="#{msg0['seRoles.label.deleteTitle']}" disabled="#{mainTemplateController.permissionsUser.seRoles lt 2}">
+					<p:commandLink styleClass="grid-btn" oncomplete="PF('deleteConfirm').show();" title="#{msg0['seRoles.label.deleteTitle']}" disabled="#{mainTemplateController.permissionsUser.seRoles lt 2}">
 						<f:setPropertyActionListener value="#{item}" target="#{seRolesController.seRole}" />
 						<i class="far fa-trash-alt grid-btn-icon" />
 					</p:commandLink>
@@ -72,9 +72,9 @@
 	</h:form>
 
 	<h:form>
-		<p:confirmDialog message="#{msg0['seRoles.message.deleteConfirm']}" header="#{msg0['seRoles.label.deleteTitle']}" widgetVar="confirmation">
-			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('confirmation').hide();" actionListener="#{seRolesController.delete}" ajax="false" />
-			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('confirmation').hide();" type="button" />
+		<p:confirmDialog message="#{msg0['seRoles.message.deleteConfirm']}" header="#{msg0['seRoles.label.deleteTitle']}" widgetVar="deleteConfirm">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('deleteConfirm').hide();" actionListener="#{seRolesController.delete}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('deleteConfirm').hide();" type="button" />
 		</p:confirmDialog>
 	</h:form>
 
@@ -93,7 +93,7 @@
 					<p:commandLink id="btnUndo" update=":msgs,@form" action="#{seRolesController.undoEdit()}">
 						<div class="btn btn-resp-h"><i class="btn-icon fa fa-undo" /><span class="btn-label">#{msg0['button.undo']}</span></div>
 					</p:commandLink>
-					<p:commandLink id="btnDelete" onclick="PF('confirmation').show();" rendered="#{seRolesController.seRole.roleId != null and mainTemplateController.permissionsUser.seRoles == 2}">
+					<p:commandLink id="btnDelete" onclick="PF('deleteConfirm').show();" rendered="#{seRolesController.seRole.roleId != null and mainTemplateController.permissionsUser.seRoles == 2}">
 						<div class="btn btn-resp-h"><i class="btn-icon fa fa-trash" /><span class="btn-label">#{msg0['button.delete']}</span></div>
 					</p:commandLink>
 				</div>

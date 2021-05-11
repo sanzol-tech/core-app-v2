@@ -89,19 +89,19 @@
 				</p:column>
 
 				<p:column width="100" exportable="false" styleClass="cell-buttons">
-					<p:commandLink class="grid-btn" update=":msgs,:frm:display" oncomplete="PF('sidebarDialog').show();"
+					<p:commandLink styleClass="grid-btn" update=":msgs,:frm:display" oncomplete="PF('sidebarDialog').show();"
 								   title="Detalle del registro" rendered="#{not empty item.oldEntity}">
 						<i class="fa fa-search fa-lg" /><span style="margin-left:5px; font-size:.8em;">Old</span>
 						<f:setPropertyActionListener value="#{item.oldEntity}" target="#{seAuditController.jsonText}" />
 					</p:commandLink>
 
-					<p:commandLink class="grid-btn" update=":msgs,:frm:display" oncomplete="PF('sidebarDialog').show();"
+					<p:commandLink styleClass="grid-btn" update=":msgs,:frm:display" oncomplete="PF('sidebarDialog').show();"
 								   title="Detalle del registro" rendered="#{not empty item.newEntity}">
 						<i class="fa fa-search fa-lg" /><span style="margin-left:5px; font-size:.8em;">New</span>
 						<f:setPropertyActionListener value="#{item.newEntity}" target="#{seAuditController.jsonText}" />
 					</p:commandLink>
 
-					<p:commandLink class="grid-btn" update=":msgs,:frm:display" oncomplete="PF('sidebarDialog').show();"
+					<p:commandLink styleClass="grid-btn" update=":msgs,:frm:display" oncomplete="PF('sidebarDialog').show();"
 								   title="Detalle del registro" rendered="#{not empty item.detail}">
 						<i class="fa fa-search fa-lg" /><span style="margin-left:5px; font-size:.8em;">Detail</span>
 						<f:setPropertyActionListener value="#{item.detail}" target="#{seAuditController.jsonText}" />

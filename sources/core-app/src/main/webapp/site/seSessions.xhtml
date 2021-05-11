@@ -58,7 +58,7 @@
 
 				<p:column width="30" exportable="false" style="text-align:right;">
 
-					<p:commandLink class="grid-btn" oncomplete="PF('confirmation').show();" title="#{msg0['seSessions.label.killTitle']}" disabled="#{mainTemplateController.permissionsUser.seSessions lt 2}">
+					<p:commandLink styleClass="grid-btn" oncomplete="PF('deleteConfirm').show();" title="#{msg0['seSessions.label.killTitle']}" disabled="#{mainTemplateController.permissionsUser.seSessions lt 2}">
 						<f:setPropertyActionListener value="#{item}" target="#{seSessionsController.authSession}" />
 						<i class="fa fa-power-off grid-btn-icon" />
 					</p:commandLink>
@@ -67,10 +67,10 @@
 
 			</p:dataTable>
 
-			<p:confirmDialog message="#{msg0['seSessions.message.killConfirm']}" header="#{msg0['seSessions.label.killTitle']}" widgetVar="confirmation">
+			<p:confirmDialog message="#{msg0['seSessions.message.killConfirm']}" header="#{msg0['seSessions.label.killTitle']}" widgetVar="deleteConfirm">
 
-				<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('confirmation').hide();" actionListener="#{seSessionsController.killSession}" ajax="false" />
-				<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('confirmation').hide();" type="button" />
+				<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('deleteConfirm').hide();" actionListener="#{seSessionsController.killSession}" ajax="false" />
+				<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('deleteConfirm').hide();" type="button" />
 
 			</p:confirmDialog>
 

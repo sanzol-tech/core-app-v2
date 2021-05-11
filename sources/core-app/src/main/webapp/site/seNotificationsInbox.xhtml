@@ -81,7 +81,7 @@
 								<i class="fa fa-check-double grid-btn-icon" />
 							</p:commandLink>
 
-							<p:commandLink styleClass="grid-btn" oncomplete="PF('confirmation').show();" title="#{msg0['seNotificationsInbox.label.deleteTitle']}" disabled="#{mainTemplateController.permissionsUser.seNotificationsInbox lt 2}">
+							<p:commandLink styleClass="grid-btn" oncomplete="PF('deleteConfirm').show();" title="#{msg0['seNotificationsInbox.label.deleteTitle']}" disabled="#{mainTemplateController.permissionsUser.seNotificationsInbox lt 2}">
 								<f:setPropertyActionListener value="#{item}" target="#{seNotificationsInboxController.seNotificationUser}" />
 								<i class="far fa-trash-alt grid-btn-icon" />
 							</p:commandLink>
@@ -97,9 +97,9 @@
 	</h:form>
 
 	<h:form>
-		<p:confirmDialog message="#{msg0['seNotificationsInbox.message.deleteConfirm']}" header="#{msg0['seNotificationsInbox.label.deleteTitle']}" widgetVar="confirmation">
-			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('confirmation').hide();" actionListener="#{seNotificationsInboxController.delete}" ajax="false" />
-			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('confirmation').hide();" type="button" />
+		<p:confirmDialog message="#{msg0['seNotificationsInbox.message.deleteConfirm']}" header="#{msg0['seNotificationsInbox.label.deleteTitle']}" widgetVar="deleteConfirm">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('deleteConfirm').hide();" actionListener="#{seNotificationsInboxController.delete}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('deleteConfirm').hide();" type="button" />
 		</p:confirmDialog>
 	</h:form>
 

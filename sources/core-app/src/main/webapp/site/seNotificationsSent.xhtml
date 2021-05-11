@@ -108,7 +108,7 @@
 								<i class="fa fa-list grid-btn-icon" />
 							</p:commandLink>
 
-							<p:commandLink styleClass="grid-btn" oncomplete="PF('confirmation').show();" title="#{msg0['seNotificationsSent.label.deleteTitle']}" disabled="#{mainTemplateController.permissionsUser.seNotificationsSent lt 2}">
+							<p:commandLink styleClass="grid-btn" oncomplete="PF('deleteConfirm').show();" title="#{msg0['seNotificationsSent.label.deleteTitle']}" disabled="#{mainTemplateController.permissionsUser.seNotificationsSent lt 2}">
 								<f:setPropertyActionListener value="#{item}" target="#{seNotificationsSentController.seNotification}" />
 								<i class="far fa-trash-alt grid-btn-icon" />
 							</p:commandLink>
@@ -146,9 +146,9 @@
 	</h:form>
 
 	<h:form>
-		<p:confirmDialog message="#{msg0['seNotificationsSent.message.deleteConfirm']}" header="#{msg0['seNotificationsSent.label.deleteTitle']}" widgetVar="confirmation">
-			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('confirmation').hide();" actionListener="#{seNotificationsSentController.delete}" ajax="false" />
-			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('confirmation').hide();" type="button" />
+		<p:confirmDialog message="#{msg0['seNotificationsSent.message.deleteConfirm']}" header="#{msg0['seNotificationsSent.label.deleteTitle']}" widgetVar="deleteConfirm">
+			<p:commandButton value="#{msg0['button.ok']}" update=":msgs" oncomplete="PF('deleteConfirm').hide();" actionListener="#{seNotificationsSentController.delete}" ajax="false" />
+			<p:commandButton value="#{msg0['button.cancel']}" onclick="PF('deleteConfirm').hide();" type="button" />
 		</p:confirmDialog>
 	</h:form>
 

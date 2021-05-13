@@ -574,7 +574,7 @@ public class SeUsersController implements Serializable
 				.add("name", seUser.getNameAlt())
 				.add("username", seUser.getUsername())
 				.add("password", newPassword);
-			SeEmailService.create().withTemplate(seEmailTemplate, replacer).sendAsync(to);
+			SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).sendAsync();
 		}
 	}
 
@@ -588,7 +588,7 @@ public class SeUsersController implements Serializable
 				.add("name", seUser.getNameAlt())
 				.add("username", seUser.getUsername())
 				.add("password", newPassword);
-			SeEmailService.create().withTemplate(seEmailTemplate, replacer).sendAsync(to);
+			SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).sendAsync();
 		}
 	}
 

@@ -108,7 +108,7 @@ public class LnPasswordRecoveryService extends BaseService
 					.add("servletURL", context.getServletURL())
 					.add("validationCode", sePasswordRecovery.getValidationCode())
 					.add("expiration", DateFormatter.getFormatterDateTimeShort().format(sePasswordRecovery.getExpirationDate()));
-				SeEmailService.create().withTemplate(seEmailTemplate, replacer).send(to);
+				SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).send();
 			}
 
 			tx.commit();
@@ -260,7 +260,7 @@ public class LnPasswordRecoveryService extends BaseService
 			Replacer replacer = Replacer.create()
 				.add("name", sePasswordRecovery.getSeUser().getNameAlt())
 				.add("username", sePasswordRecovery.getSeUser().getUsername());
-			SeEmailService.create().withTemplate(seEmailTemplate, replacer).send(to);
+			SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).send();
 		}
 
 		return sePassword;

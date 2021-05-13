@@ -125,7 +125,7 @@ public class SePasswordService extends BaseService
 			Replacer replacer = Replacer.create()
 						.add("name", seUser.getNameAlt())
 						.add("username", seUser.getUsername());
-			SeEmailService.create().withTemplate(seEmailTemplate, replacer).sendAsync(to);
+			SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).sendAsync();
 		}
 	}
 

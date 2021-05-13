@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.email.EmailPopulatingBuilder;
@@ -26,6 +27,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 
 import sanzol.app.config.AppProperties;
 import sanzol.se.model.entities.SeEmailTemplate;
+import sanzol.util.DateTimeUtils;
 import sanzol.util.Replacer;
 
 public class SeEmailService
@@ -43,9 +45,17 @@ public class SeEmailService
 	private final String fromPerson = AppProperties.PROP_MAIL_OUT_PERSON.getValue();
 
 	private Mailer mailer;
-	private SeEmailTemplate seEmailTemplate;
-	private Replacer replacer;
+	private String to = null;
+	private String subject = null;
+	private String plainBody = null;
+	private String htmlBody = null;
+	private Path pathAttach = null;
+	private LocalDateTime sentDate = null;
 
+	public LocalDateTime getSentDate()
+	{
+		return sentDate;
+	}
 
 	public static SeEmailService create()
 	{
@@ -59,33 +69,46 @@ public class SeEmailService
 		return seMailService;
 	}
 
-	public SeEmailService withTemplate(SeEmailTemplate seEmailTemplate, Replacer replacer)
+	public SeEmailService withTemplate(String to, SeEmailTemplate seEmailTemplate, Replacer replacer)
 	{
-		this.seEmailTemplate = seEmailTemplate;
-		this.replacer = replacer;
+		return with(to, seEmailTemplate.getSubject(), seEmailTemplate.getPlainBody(), seEmailTemplate.getHtmlBody(), replacer);
+	}
+
+	public SeEmailService with(String to, String subject, String plainBody)
+	{
+		this.to = to;
+		this.subject = subject;
+		this.plainBody = plainBody;
 
 		return this;
 	}
 
-	public void send(String to) throws IOException, DocumentException
+	public SeEmailService with(String to, String subject, String plainBody, String htmlBody, Replacer replacer)
 	{
-		 send(to, null);
+		this.to = to;
+		this.subject = replacer.replace(subject);
+		this.plainBody = (plainBody != null && !plainBody.isBlank()) ? replacer.replace(plainBody) : null;
+		this.htmlBody = (htmlBody != null && !htmlBody.isBlank()) ? replacer.replace(htmlBody) : null;
+
+		return this;
 	}
 
-	public void send(String to, Path pathAttach) throws IOException, DocumentException
+	public SeEmailService withAttach(Path pathAttach)
 	{
-		String subject = replacer.replace(seEmailTemplate.getSubject());
-		String plainText = (seEmailTemplate.getPlainBody() != null && !seEmailTemplate.getPlainBody().isBlank()) ? replacer.replace(seEmailTemplate.getPlainBody()) : null;
-		String htmlText = (seEmailTemplate.getHtmlBody() != null && !seEmailTemplate.getHtmlBody().isBlank()) ? replacer.replace(seEmailTemplate.getHtmlBody()) : null;
+		this.pathAttach = pathAttach;
+		return this;
+	}
 
+	public SeEmailService send() throws IOException, DocumentException
+	{
 		if (!DEBUG)
 		{
 			EmailPopulatingBuilder epb = EmailBuilder.startingBlank()
 					.from(fromPerson, fromAddress)
 					.to(to)
 					.withSubject(subject)
-					.withPlainText(plainText)
-					.withHTMLText(htmlText);
+					.withPlainText(plainBody)
+					.withHTMLText(htmlBody);
 
 			if (pathAttach != null)
 			{
@@ -98,8 +121,12 @@ public class SeEmailService
 		}
 		else
 		{
-			debug(to, subject, plainText, htmlText);
+			debug(to, subject, plainBody, htmlBody);
 		}
+
+		sentDate = DateTimeUtils.now();
+
+		return this;
 	}
 
 	private void withAttachment(EmailPopulatingBuilder epb, Path pathAttach) throws IOException, DocumentException
@@ -117,12 +144,7 @@ public class SeEmailService
 		epb.withAttachment (name, data, mimetype);
 	}
 
-	public void sendAsync(String to)
-	{
-		sendAsync(to, null);
-	}
-
-	public void sendAsync(String to, Path attach)
+	public void sendAsync()
 	{
 		Thread thread = new Thread(new Runnable()
 		{
@@ -130,7 +152,7 @@ public class SeEmailService
 			{
 				try
 				{
-					send(to, attach);
+					send();
 				}
 				catch (Exception e)
 				{
@@ -142,7 +164,7 @@ public class SeEmailService
 		thread.start();
 	}
 
-	private void debug(String to, String subject, String plainText, String htmlText)
+	private void debug(String to, String subject, String plainBody, String htmlBody)
 	{
 		try	{
 			Thread.sleep(3000);
@@ -153,10 +175,10 @@ public class SeEmailService
 		System.out.println("subject: " + subject);
 		System.out.println("+----------------------+");
 		System.out.println("plain body:");
-		System.out.println(plainText);
+		System.out.println(plainBody);
 		System.out.println("+----------------------+");
 		System.out.println("html body:");
-		System.out.println(htmlText);
+		System.out.println(htmlBody);
 		System.out.println("+----------------------+");
 		System.out.println("");
 	}

@@ -188,7 +188,7 @@ public class SeUsersService extends BaseService
 					.add("name", seUser.getNameAlt())
 					.add("username", seUser.getUsername())
 					.add("password", password);
-				SeEmailService.create().withTemplate(seEmailTemplate, replacer).sendAsync(to);
+				SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).sendAsync();
 			}
 
 			tx.commit();

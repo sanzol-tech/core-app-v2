@@ -279,7 +279,7 @@ public class SeRegistrationsService extends BaseService
 						.add("servletURL", context.getServletURL())
 						.add("validationCode", seRegistration.getValidationCode())
 						.add("expiration", DateFormatter.getFormatterDateTimeShort().format(expirationDate));
-			SeEmailService.create().withTemplate(seEmailTemplate, replacer).send(to);
+			SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).send();
 		}
 
 	}
@@ -357,7 +357,7 @@ public class SeRegistrationsService extends BaseService
 							.add("servletURL", context.getServletURL())
 							.add("validationCode", seRegistration.getValidationCode())
 							.add("expiration", DateFormatter.getFormatterDateTimeShort().format(expirationDate));
-				SeEmailService.create().withTemplate(seEmailTemplate, replacer).send(to);
+				SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).send();
 			}
 
 			tx.commit();
@@ -516,7 +516,7 @@ public class SeRegistrationsService extends BaseService
 					Replacer replacer = Replacer.create()
 								.add("name", seRegistration.getFullNameAlt())
 								.add("username", seRegistration.getUsername());
-					SeEmailService.create().withTemplate(seEmailTemplate, replacer).sendAsync(to);
+					SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).sendAsync();
 				}
 
 				canContinue = false;
@@ -569,7 +569,7 @@ public class SeRegistrationsService extends BaseService
 							.add("servletURL", context.getServletURL())
 							.add("validationCode", seRegistration.getValidationCode())
 							.add("expiration", DateFormatter.getFormatterDateTimeShort().format(expirationDate));
-				SeEmailService.create().withTemplate(seEmailTemplate, replacer).sendAsync(to);
+				SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).sendAsync();
 			}
 
 			tx.commit();
@@ -613,7 +613,7 @@ public class SeRegistrationsService extends BaseService
 				Replacer replacer = Replacer.create()
 							.add("name", seRegistration.getFullNameAlt())
 							.add("username", seRegistration.getUsername());
-				SeEmailService.create().withTemplate(seEmailTemplate, replacer).sendAsync(to);
+				SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).sendAsync();
 			}
 
 			tx.commit();
@@ -684,7 +684,7 @@ public class SeRegistrationsService extends BaseService
 				Replacer replacer = Replacer.create()
 							.add("name", seRegistration.getFullNameAlt())
 							.add("username", seRegistration.getUsername());
-				SeEmailService.create().withTemplate(seEmailTemplate, replacer).sendAsync(to);
+				SeEmailService.create().withTemplate(to, seEmailTemplate, replacer).sendAsync();
 			}
 
 			tx.commit();

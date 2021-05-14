@@ -25,8 +25,8 @@ public class SePasswordChangeController implements Serializable
 
 	private static final String THIS_PAGE = "sePasswordChange";
 
-	private static final String MESSAGE_NOTEQUAL = getI18nString("sePasswordChange.message.NotEqual");
-	private static final String MESSAGE_EQUALS_OLD_NEW = getI18nString("sePasswordChange.message.EqualsOldNew");
+	private static final String MESSAGE_NOTEQUAL = getI18nString("sePasswordChange.message.notEqual");
+	private static final String MESSAGE_EQUALS_OLD_NEW = getI18nString("sePasswordChange.message.equalsOldNew");
 	private static final String MESSAGE_CHANGED_SUCCESSFUL = getI18nString("sePasswordChange.message.changedSuccesful");
 
 	private String oldPassword;

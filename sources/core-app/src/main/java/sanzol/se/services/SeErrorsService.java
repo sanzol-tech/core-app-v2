@@ -114,12 +114,16 @@ public class SeErrorsService extends BaseService
 		catch (Exception e)
 		{
 			LOG.error(ExceptionUtils.getMessage(e));
-
-			if (tx != null)
+			if (tx != null && tx.getStatus().canRollback())
 			{
 				tx.rollback();
 			}
 		}
+		finally
+		{
+			hbSession.close();
+		}
+
 	}
 
 }

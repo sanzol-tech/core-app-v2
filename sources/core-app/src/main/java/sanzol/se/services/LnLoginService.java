@@ -15,8 +15,6 @@ import org.apache.commons.codec.DecoderException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.query.NativeQuery;
-import org.hibernate.type.StandardBasicTypes;
 
 import sanzol.app.config.AppProperties;
 import sanzol.app.config.HibernateUtil;

@@ -66,10 +66,14 @@ public class SeEmailTemplatesCache
 		catch (Exception e)
 		{
 			LOG.error("Error getting values", e);
-			if (tx != null)
+			if (tx != null && tx.getStatus().canRollback())
 			{
 				tx.rollback();
 			}
+		}
+		finally
+		{
+			hbSession.close();
 		}
 
 		return map;

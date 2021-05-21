@@ -2,10 +2,12 @@ package sanzol.se.model.entities;
 
 import static sanzol.app.config.I18nPreference.getI18nString;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.mail.internet.MimeUtility;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -249,12 +251,22 @@ public class SeRegistration implements java.io.Serializable
 			return null;
 		}
 
+		String person;
+		try	{
+			person = MimeUtility.decodeText(getFullNameAlt());
+		} catch (UnsupportedEncodingException e) { 
+			person = null; 
+		}		
+
 		String result = "";
 		for (String item : email.split("[;,]"))
 		{
 			if (!item.isBlank())
 			{
-				result += (result.isEmpty() ? "" : ";") + getFullNameAlt() + "<" + item.trim() + ">";
+				if (person != null)
+					result += (result.isEmpty() ? "" : ";") + person + " <" + item.trim() + ">";
+				else
+					result += (result.isEmpty() ? "" : ";") + item.trim();
 			}
 		}
 

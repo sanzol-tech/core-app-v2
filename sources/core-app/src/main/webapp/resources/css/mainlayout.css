@@ -100,6 +100,10 @@ body {
 	border-right: 1px solid #ccc;
 }
 
+.layout-wrapper .layout-sidebar:hover {
+	width: 250px;
+}
+
 /* ------------------------------ */
 /* ------- SIDEBAR-HEADER ------- */
 /* ------------------------------ */
@@ -130,16 +134,6 @@ body {
 
 .sidebar-nav .sidebar-nav-container {
 	padding: 0;
-}
-
-.sidebar-nav .sidebar-scroll-content {
-	display: block;
-	height: 100%;
-	position: relative;
-}
-
-.sidebar-nav .sidebar-scroll-content .sidebar-nav-container {
-	padding-bottom: 145px;
 }
 
 .sidebar-nav .sidebar-menuitem {

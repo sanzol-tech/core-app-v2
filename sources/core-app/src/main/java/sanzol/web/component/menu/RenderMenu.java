@@ -33,13 +33,10 @@ public class RenderMenu
 
 	private final String htmlMnuItem
 		= "\t<li class=\"sidebar-menuitem\">"
-		+ "<span>"
 		+ "<a href=\"" + contextPath + "/%s\" class=\"menuLink\">"
 		+ "<i class=\"%s\"></i>"
-		+ "<span class=\"menu-text-group\">"
-		+ "<span class=\"menu-text\">%s</span>" + "</span>"
+		+ "<span class=\"menu-text\">%s</span>" 
 		+ "</a>"
-		+ "</span>"
 		+ "</li>\r\n";
 
 	public StringBuilder renderSubMenu(List<MenuElement> elements)
